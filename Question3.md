@@ -1,4 +1,4 @@
-Spring Boot and JPA: Overview
+# Spring Boot and JPA: Overview
 │
 ├── @SpringBootApplication
 │     ├── Combines three main annotations:
@@ -134,6 +134,7 @@ Spring Boot and JPA: Overview
       │     └── Building hypermedia-driven RESTful web services
       └── Project Lombok
             └── Reduces boilerplate code with annotations like @Data
+
 
 Key Takeaways:
 - **@SpringBootApplication** simplifies configuration by combining essential annotations.
