@@ -444,3 +444,164 @@ movieRepository.saveAll(movies);
 ## 50. What is the difference between `saveAll()` and `save()` methods in `JpaRepository`?
 
 `save()` is for single entities, while `saveAll()` is for collections, optimized for bulk operations.
+
+
+# Frameworks and Libraries Used by Spring Boot
+
+Spring Boot is designed to simplify the development of Spring applications. It does this by providing auto-configuration for many popular frameworks and libraries. Here's an overview of the key frameworks and components commonly used in Spring Boot applications:
+
+## 1. Spring Framework
+- The core framework that provides fundamental support for dependency injection, transaction management, web applications, data access, messaging, testing, and more.
+- Key modules include Spring Core, Spring AOP, Spring JDBC, Spring ORM, Spring Web MVC, etc.
+
+## 2. Spring Data
+- Simplifies data access from various databases.
+- Includes support for JPA, MongoDB, Redis, Cassandra, and more.
+
+```java
+@Repository
+public interface UserRepository extends JpaRepository<User, Long> {
+    List<User> findByLastName(String lastName);
+}
+```
+
+## 3. Spring Security
+- Provides authentication, authorization, and other security features for Spring applications.
+
+```java
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+            .antMatchers("/", "/home").permitAll()
+            .anyRequest().authenticated()
+            .and()
+            .formLogin()
+            .loginPage("/login").permitAll()
+            .and()
+            .logout().permitAll();
+    }
+}
+```
+
+## 4. Spring Cloud
+- Provides tools for building and deploying microservices.
+- Includes service discovery, configuration management, circuit breakers, intelligent routing, etc.
+
+## 5. Hibernate ORM
+- The default JPA provider in Spring Boot.
+- Handles object-relational mapping.
+
+## 6. Embedded Servers
+- Tomcat, Jetty, or Undertow can be embedded in your Spring Boot application.
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+    <!-- Uses Tomcat by default -->
+</dependency>
+```
+
+## 7. Thymeleaf (or other view technologies)
+- Server-side Java template engine for web applications.
+
+```html
+<table>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.name}">User name</td>
+    </tr>
+</table>
+```
+
+## 8. Jackson
+- For JSON processing and serialization.
+
+## 9. SLF4J and Logback
+- For logging in Spring Boot applications.
+
+```java
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class MyClass {
+    private static final Logger logger = LoggerFactory.getLogger(MyClass.class);
+    
+    public void doSomething() {
+        logger.info("Doing something");
+    }
+}
+```
+
+## 10. H2 Database
+- In-memory database often used for development and testing.
+
+```properties
+spring.datasource.url=jdbc:h2:mem:testdb
+spring.datasource.driverClassName=org.h2.Driver
+```
+
+## 11. JUnit and Spring Test
+- For unit and integration testing of Spring Boot applications.
+
+```java
+@SpringBootTest
+class MyApplicationTests {
+
+    @Autowired
+    private MyService myService;
+
+    @Test
+    void testMyService() {
+        // Test code
+    }
+}
+```
+
+## 12. Actuator
+- Provides production-ready features to help you monitor and manage your application.
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+```
+
+## 13. Spring Boot DevTools
+- Provides fast application restarts, LiveReload, and configurations for enhanced development experience.
+
+## 14. Validation API and Hibernate Validator
+- For data validation in Spring Boot applications.
+
+```java
+public class User {
+    @NotBlank(message = "Name is mandatory")
+    private String name;
+    
+    @Email(message = "Email should be valid")
+    private String email;
+}
+```
+
+## 15. Spring HATEOAS
+- For creating REST representations that follow HATEOAS principles.
+
+## 16. Project Lombok
+- Reduces boilerplate code in Java classes.
+
+```java
+@Data
+@Entity
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
+    private String email;
+}
+```
+
+Spring Boot's power lies in its ability to automatically configure these frameworks and libraries based on your project's dependencies. This allows developers to get started quickly with a fully-featured application while still providing the flexibility to customize when needed.
