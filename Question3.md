@@ -148,8 +148,6 @@ Key Takeaways:
 
 ------------------------------
 
-Here is a comprehensive example of a Movie API similar to the TMDB API, implementing the applicable points discussed earlier. This application uses Spring Boot, Spring Data JPA, and follows best practices for building a RESTful API.
-
 ---
 
 ## 1. Project Setup
@@ -163,9 +161,16 @@ Create a new Spring Boot project with the following dependencies:
 
 ---
 
-## 2. Application Entry Point
+Here is the complete code for the movie API with all necessary imports, package structure, and added getters and setters for the `Movie` entity.
+
+### 1. Application Entry Point
 
 ```java
+package com.example.movieapi;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 @SpringBootApplication
 public class MovieApiApplication {
     public static void main(String[] args) {
@@ -174,13 +179,20 @@ public class MovieApiApplication {
 }
 ```
 
-- **Explanation**: The `@SpringBootApplication` annotation combines `@Configuration`, `@EnableAutoConfiguration`, and `@ComponentScan`. It enables component scanning and auto-configuration of the application.
-
 ---
 
-## 3. Movie Entity
+### 2. Movie Entity (with Getters and Setters)
 
 ```java
+package com.example.movieapi.entity;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "movies")
 public class Movie {
@@ -204,21 +216,94 @@ public class Movie {
 
     private LocalDate releaseDate;
 
-    // Constructors, getters, and setters
+    // Constructors
+    public Movie() {
+    }
+
+    public Movie(String title, String description, String director, String genre, Double rating, LocalDate releaseDate) {
+        this.title = title;
+        this.description = description;
+        this.director = director;
+        this.genre = genre;
+        this.rating = rating;
+        this.releaseDate = releaseDate;
+    }
+
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getDirector() {
+        return director;
+    }
+
+    public void setDirector(String director) {
+        this.director = director;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public Double getRating() {
+        return rating;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
+    }
+
+    public LocalDate getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(LocalDate releaseDate) {
+        this.releaseDate = releaseDate;
+    }
 }
 ```
 
-- **Explanation**:
-  - `@Entity`: Marks the class as a JPA entity.
-  - `@Table`: Specifies the table name in the database.
-  - `@Id` and `@GeneratedValue`: Indicate the primary key and its generation strategy.
-  - Validation annotations like `@NotBlank`, `@Min`, and `@Max` ensure data integrity.
-
 ---
 
-## 4. Movie Repository
+### 3. Movie Repository
 
 ```java
+package com.example.movieapi.repository;
+
+import com.example.movieapi.entity.Movie;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import java.time.LocalDate;
+import java.util.List;
+
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, Long> {
 
@@ -236,16 +321,23 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
 }
 ```
 
-- **Explanation**:
-  - Extends `JpaRepository` to inherit CRUD operations.
-  - Custom query methods are defined using method names and `@Query` annotations.
-  - `@Repository` is optional but enables exception translation.
-
 ---
 
-## 5. Movie Service
+### 4. Movie Service
 
 ```java
+package com.example.movieapi.service;
+
+import com.example.movieapi.entity.Movie;
+import com.example.movieapi.exception.ResourceNotFoundException;
+import com.example.movieapi.repository.MovieRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class MovieService {
 
@@ -308,17 +400,26 @@ public class MovieService {
 }
 ```
 
-- **Explanation**:
-  - `@Service`: Marks the class as a service provider.
-  - Constructor-based dependency injection is used for `MovieRepository`.
-  - `@Transactional`: Ensures that the `updateMovie` method is executed within a transaction.
-  - Contains business logic and data manipulation methods.
-
 ---
 
-## 6. Movie Controller
+### 5. Movie Controller
 
 ```java
+package com.example.movieapi.controller;
+
+import com.example.movieapi.entity.Movie;
+import com.example.movieapi.exception.ResourceNotFoundException;
+import com.example.movieapi.service.MovieService;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import jakarta.validation.Valid;
+import java.time.LocalDate;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/movies")
 public class MovieController {
@@ -384,19 +485,16 @@ public class MovieController {
 }
 ```
 
-- **Explanation**:
-  - `@RestController`: Combines `@Controller` and `@ResponseBody` for RESTful services.
-  - `@RequestMapping`: Sets the base URL for all endpoints in this controller.
-  - Constructor-based dependency injection for `MovieService`.
-  - Endpoint methods handle HTTP requests and responses.
-  - Uses `@Valid` to enforce validation on input data.
-  - Provides search functionality via query parameters.
-
 ---
 
-## 7. Exception Handling
+### 6. Exception Handling
 
 ```java
+package com.example.movieapi.exception;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
 @ResponseStatus(HttpStatus.NOT_FOUND)
 public class ResourceNotFoundException extends RuntimeException {
 
@@ -406,13 +504,13 @@ public class ResourceNotFoundException extends RuntimeException {
 }
 ```
 
-- **Explanation**: Custom exception to handle resource not found scenarios with appropriate HTTP status codes.
-
 ---
 
-## 8. Application Properties
+### 7. Application Properties
 
 ```properties
+# application.properties
+
 # H2 Database Configuration
 spring.datasource.url=jdbc:h2:mem:moviesdb
 spring.datasource.driverClassName=org.h2.Driver
@@ -428,18 +526,24 @@ spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.format_sql=true
 ```
 
-- **Explanation**: Configures an in-memory H2 database for development and testing. Hibernate is set to automatically update the database schema.
-
 ---
 
-## 9. CORS Configuration (Optional)
+### 8. CORS Configuration (Optional)
 
 ```java
+package com.example.movieapi.config;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
     @Override
-    public void addCorsMappings(CorsRegistry registry) {
+    public void addCors
+
+Mappings(CorsRegistry registry) {
         registry.addMapping("/api/**")
             .allowedOrigins("*") // Replace "*" with specific origins in production
             .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
@@ -447,9 +551,7 @@ public class WebConfig implements WebMvcConfigurer {
 }
 ```
 
-- **Explanation**: Configures Cross-Origin Resource Sharing (CORS) to allow requests from different origins, which is useful when the frontend and backend are on different domains or ports.
-
----
+This code provides a complete Spring Boot movie API implementation, with added getters and setters for the `Movie` entity.
 
 ## 10. Project Structure
 
