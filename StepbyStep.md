@@ -1,5 +1,43 @@
 https://docs.spring.io/spring-boot/tutorial/first-application/index.html
-
+Frameworks and Libraries Used by Spring Boot  
+      ├── Spring Framework  
+      │   ├── Core support for dependency injection, AOP, etc.  
+      │   └── Modules: Core, AOP, JDBC, ORM, Web MVC  
+      ├── Spring Data  
+      │   ├── Simplifies data access  
+      │   └── Supports JPA, MongoDB, Redis, etc.  
+      ├── Spring Security  
+      │   └── Authentication and authorization features  
+      ├── Hibernate ORM  
+      │   └── Default JPA provider for ORM  
+      ├── Embedded Servers  
+      │   ├── Tomcat (default)  
+      │   ├── Jetty  
+      │   └── Undertow  
+      ├── View Technologies  
+      │   ├── Thymeleaf  
+      │   └── Alternative: FreeMarker, JSP  
+      ├── Jackson  
+      │   └── JSON processing and serialization  
+      ├── Logging Frameworks  
+      │   ├── SLF4J  
+      │   └── Logback  
+      ├── Databases  
+      │   ├── H2 Database (in-memory for testing)  
+      │   └── Support for MySQL, PostgreSQL, etc.  
+      ├── Testing Tools  
+      │   ├── JUnit  
+      │   └── Spring Test  
+      ├── Actuator  
+      │   └── Monitoring and management endpoints  
+      ├── DevTools  
+      │   └── Enhanced development experience  
+      ├── Validation API  
+      │   └── Data validation with Hibernate Validator  
+      ├── Spring HATEOAS  
+      │   └── Building hypermedia-driven RESTful web services  
+      └── Project Lombok  
+          └── Reduces boilerplate code with annotations like @Data
 Let's go step by step, starting with setting up the project in **Spring Initializer**, and then gradually adding features, including a simple POST request, a basic entity, and a mock service layer.
 
 ---
