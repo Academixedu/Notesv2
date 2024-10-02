@@ -201,6 +201,105 @@ The `Navbar` component provides navigation links to the home page and the add mo
 
 Add some basic CSS to make your app look better. You can create a `src/App.css` file and import it in `App.js`.
 
+there wasn't any specific styling to center the movie list. Let's modify the `MovieList` component and add some basic CSS to center the content. 
+
+
+
+```javascript
+// File: src/components/MovieList.js
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import './MovieList.css'; // Import the CSS file
+
+function MovieList() {
+  const [movies, setMovies] = useState([]);
+
+  useEffect(() => {
+    // Fetch movies from API
+    fetch('http://localhost:8080/movies')
+      .then(response => response.json())
+      .then(data => setMovies(data))
+      .catch(error => console.error('Error:', error));
+  }, []);
+
+  return (
+    <div className="movie-list-container">
+      <h1>Movie List</h1>
+      <ul className="movie-list">
+        {movies.map(movie => (
+          <li key={movie.id} className="movie-item">
+            <Link to={`/movie/${movie.id}`}>{movie.title}</Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default MovieList;
+
+// File: src/components/MovieList.css
+.movie-list-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.movie-list {
+  list-style-type: none;
+  padding: 0;
+  width: 100%;
+  max-width: 600px;
+}
+
+.movie-item {
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+}
+
+.movie-item a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+.movie-item a:hover {
+  color: #007bff;
+}
+
+```
+
+To center the movie list and improve its appearance, follow these steps:
+
+1. Create a new CSS file:
+   Create a file named `MovieList.css` in the same directory as your `MovieList.js` component.
+
+2. Update the `MovieList.js` component:
+   Replace the content of `MovieList.js` with the code provided in the artifact above.
+
+3. Add the CSS:
+   Copy the CSS code from the artifact into your `MovieList.css` file.
+
+Here's an explanation of the changes:
+
+1. We've added a new `className` to the main container div: `movie-list-container`. This class is used to center the content.
+
+2. We've also added classes to the `ul` and `li` elements for styling.
+
+3. In the CSS:
+   - `.movie-list-container` uses flexbox to center its contents vertically and horizontally.
+   - `.movie-list` is given a maximum width and centered using `margin: 0 auto`.
+   - `.movie-item` is styled to look like cards with some padding and background color.
+
+4. We've imported the CSS file at the top of the `MovieList.js` component.
+
+These changes will center the movie list on the page and give it a more appealing look. The list items will appear as cards, and the entire list will be centered both horizontally and vertically.
+
+Remember to adjust the styles as needed to fit your overall design aesthetic. You might want to apply similar styling principles to other components in your app for consistency.
+
 ### Step 8: Test your application
 
 1. Start your Spring Boot backend application.
