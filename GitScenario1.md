@@ -69,24 +69,10 @@ Here’s how you can handle this:
 
 ### Using the PAT for Git Push:
 
-1. When you run the command `git push -u origin master`, Git will ask for your credentials.
-2. Instead of your password, enter the generated **PAT** in place of your GitHub password.
-
-Alternatively, you can store the token using a credential helper so that you don't have to enter it each time:
-
 ```bash
-git config --global credential.helper cache
+git remote set-url origin https://john-doe:ghp_12345abcde@github.com/john-doe/my-web-app.git
+
 ```
-
-Or for more secure long-term storage:
-
-```bash
-git config --global credential.helper store
-```
-
-This way, you can push to your repository without re-entering the token every time.
-
----
 
 ### Step 3: Collaborating with a Colleague via Pull Request
 
