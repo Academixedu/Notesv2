@@ -2351,4 +2351,157 @@ Data structures like classes (entities), lists, and optionals are used to model 
 By examining the questions and answers provided, we can see how these concepts are not only theoretical but practically applied in the codebase, resulting in a robust and efficient application design.
 
 ---
+## Coding Questions
+
+1. **Write the entry point for a Spring Boot application.**
+   - Expected answer: Implement `MovieApiApplication.java` with the `@SpringBootApplication` annotation.
+
+2. **Create a JPA entity class for a `Movie` with fields like `title`, `description`, `director`, and `rating`. Include validation annotations.**
+   - Expected answer: Define the `Movie` entity with appropriate JPA annotations and validation constraints (e.g., `@NotBlank`, `@Min`, `@Max`).
+
+3. **Write a `MovieRepository` interface that extends `JpaRepository` for managing `Movie` entities.**
+   - Expected answer: Implement `MovieRepository` with methods for searching by title, genre, and rating.
+
+4. **Create a REST API endpoint to get a list of all movies.**
+   - Expected answer: Implement `getAllMovies()` method in `MovieController` with `@GetMapping`.
+
+5. **Write a REST API endpoint to search for movies by title.**
+   - Expected answer: Add a method in `MovieController` with `@GetMapping("/search")` and search logic by title.
+
+6. **Write a method to save a new movie in the database via POST request.**
+   - Expected answer: Implement `createMovie()` method in `MovieController` with `@PostMapping`.
+
+7. **Write a service method to update an existing movie’s details.**
+   - Expected answer: Implement `updateMovie()` in `MovieService` and call it from `MovieController`.
+
+8. **Write an API endpoint to delete a movie by its ID.**
+   - Expected answer: Implement `deleteMovie()` in `MovieController` with `@DeleteMapping`.
+
+9. **Implement a method to find all movies with a rating greater than or equal to a given value.**
+   - Expected answer: Write a query in `MovieRepository` with `@Query`.
+
+10. **Write a method in `MovieRepository` to fetch movies released between two dates.**
+    - Expected answer: Define a custom query using `@Query` and `@Param` annotations.
+
+11. **Create an exception handler for when a movie is not found.**
+    - Expected answer: Implement `ResourceNotFoundException` and throw it from service methods.
+
+12. **Write the configuration to connect to an in-memory H2 database.**
+    - Expected answer: Define properties in `application.properties` for H2 configuration.
+
+13. **Write code to enable CORS for all origins and HTTP methods in your API.**
+    - Expected answer: Implement `WebConfig` with `addCorsMappings()` method.
+
+14. **Add pagination support to the API to get movies page by page.**
+    - Expected answer: Modify `MovieRepository` to extend `PagingAndSortingRepository`.
+
+15. **Write a query to find movies by director name.**
+    - Expected answer: Add a query in `MovieRepository` to search by `director`.
+
+16. **Implement a method to search for movies by genre.**
+    - Expected answer: Write `findByGenre()` in `MovieRepository` and use it in `MovieService`.
+
+17. **Create a method in the service layer to fetch a movie by its ID.**
+    - Expected answer: Implement `getMovieById()` in `MovieService`.
+
+18. **Write a method to update only the rating of a movie.**
+    - Expected answer: Implement a partial update method in `MovieService`.
+
+19. **Add validation so that the rating must be between 0 and 10.**
+    - Expected answer: Use `@Min` and `@Max` annotations in the `Movie` entity for the rating field.
+
+20. **Modify the `Movie` entity to make the `releaseDate` mandatory.**
+    - Expected answer: Add `@NotNull` annotation to the `releaseDate` field.
+
+21. **Write code to automatically generate the `id` for each movie.**
+    - Expected answer: Use `@GeneratedValue(strategy = GenerationType.IDENTITY)` in `Movie`.
+
+22. **Implement a custom exception handler for invalid input.**
+    - Expected answer: Create a class annotated with `@ControllerAdvice` to handle validation errors.
+
+23. **Write a method to search for movies by title, ignoring case.**
+    - Expected answer: Implement `findByTitleContainingIgnoreCase()` in `MovieRepository`.
+
+24. **Add functionality to return only movies of a specific genre via query parameters.**
+    - Expected answer: Add query parameter handling in `MovieController`.
+
+25. **Write a method to filter movies based on rating via query parameters.**
+    - Expected answer: Modify `MovieController` to filter by rating.
+
+26. **Write code to log every request made to the `/api/movies` endpoint.**
+    - Expected answer: Use `@Before` in an Aspect or Spring Boot's logging functionality.
+
+27. **Implement a feature to soft delete movies (i.e., mark them as deleted without removing them from the database).**
+    - Expected answer: Add a `deleted` flag in the `Movie` entity and update `deleteMovie()` method.
+
+28. **Write a method to retrieve only non-deleted movies from the database.**
+    - Expected answer: Modify queries in `MovieRepository` to filter out deleted movies.
+
+29. **Write the properties to show SQL queries in the console.**
+    - Expected answer: Add `spring.jpa.show-sql=true` in `application.properties`.
+
+30. **Write a unit test for the `createMovie()` method.**
+    - Expected answer: Use JUnit and Mockito to write a test case for `createMovie()`.
+
+31. **Write a unit test for the `getAllMovies()` method.**
+    - Expected answer: Mock the repository and test the `getAllMovies()` method.
+
+32. **Write a REST API method to return the number of movies in the database.**
+    - Expected answer: Add an endpoint in `MovieController` to return the count of movies.
+
+33. **Implement internationalization for movie titles in the API.**
+    - Expected answer: Use Spring's message sources to return titles in different languages.
+
+34. **Write a method to update a movie’s genre without modifying other fields.**
+    - Expected answer: Create a partial update in `MovieService`.
+
+35. **Write code to handle invalid data in the `rating` field and return an appropriate error message.**
+    - Expected answer: Add validation and exception handling for `@Min` and `@Max`.
+
+36. **Write code to fetch a list of movies sorted by their release date.**
+    - Expected answer: Use `findAll(Sort.by("releaseDate"))` in `MovieRepository`.
+
+37. **Write a custom validation annotation to check if the movie title is unique.**
+    - Expected answer: Implement a custom `@UniqueTitle` validation annotation.
+
+38. **Write a method to find all movies directed by a specific director.**
+    - Expected answer: Add a method in `MovieRepository` and call it from `MovieService`.
+
+39. **Implement basic authentication for accessing the movie API.**
+    - Expected answer: Use Spring Security for implementing basic authentication.
+
+40. **Write a method to return a list of top-rated movies (rating > 8).**
+    - Expected answer: Implement a query in `MovieRepository` to fetch top-rated movies.
+
+41. **Write a search endpoint to filter movies by both title and genre.**
+    - Expected answer: Modify `MovieController` to accept both title and genre as query parameters.
+
+42. **Add Swagger documentation to the movie API.**
+    - Expected answer: Integrate Swagger for API documentation.
+
+43. **Write a method to find movies where the title starts with a given string.**
+    - Expected answer: Use a custom query in `MovieRepository`.
+
+44. **Write code to validate the release date so that it cannot be in the future.**
+    - Expected answer: Add a custom validator for the `releaseDate` field.
+
+45. **Create a custom exception for duplicate movie titles.**
+    - Expected answer: Throw a custom `DuplicateTitleException` in `createMovie()`.
+
+46. **Write a method to retrieve movies released in a specific year.**
+    - Expected answer: Use `findByReleaseDateBetween()` to filter movies by release year.
+
+47. **Implement a method to handle HTTP `400` errors globally.**
+    - Expected answer: Create a global exception handler with `@ControllerAdvice`.
+
+48. **Write a test to verify that the movie repository saves a movie correctly.**
+    - Expected answer: Write an integration test using H2 to test `save()` method.
+
+49. **Write code to validate that the movie description is not too short.**
+    - Expected answer: Use `@Size(min = 10)` annotation in the `Movie` entity.
+
+50. **Add logging in the service layer to log when movies are created, updated, or deleted.**
+    - Expected answer: Use SLF4J or Logback for logging in `MovieService`.
+
+These questions aim to assess students' coding skills and their ability to implement and work with various Spring Boot concepts.
 
