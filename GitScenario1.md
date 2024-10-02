@@ -74,7 +74,7 @@ git remote set-url origin https://john-doe:ghp_12345abcde@github.com/john-doe/my
 
 ```
 
-### Step 3: Collaborating with a Colleague via Pull Request
+### Step 3: Collaborating with a Colleague via Pull Requests
 
 1. Your colleague forks your repository and makes a new branch (`feature-header-update`). They make some changes in `index.html` by updating the `<h1>` tag.
 
