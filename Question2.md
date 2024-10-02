@@ -1,5 +1,8 @@
 # Spring Boot and JPA: Questions and Answers with Code Examples
-
+@SpringBootApplication enables component scanning.
+Stereotype annotations (@RestController, @Service, @Repository) mark classes as beans.
+Spring Data JPA automatically creates bean implementations for repository interfaces.
+Dependency injection is handled automatically for beans.
 ## 1. What are the three main annotations combined in `@SpringBootApplication`?
 
 `@SpringBootApplication` combines:
