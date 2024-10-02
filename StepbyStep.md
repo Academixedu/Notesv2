@@ -604,10 +604,89 @@ By now, you have implemented:
 4. **Unit testing using JUnit and Mockito**.
 5. **Monitoring using Actuator**.
 
-You can now continue by adding more features like pagination, custom queries, security, and more complex business logic, but you already have a fully functioning Movie API!
+# Movie API Development Challenges
 
+1. **Review Existing Code**: Familiarize yourself with the existing `MovieApiApplication`, `Movie` entity, `MovieRepository`, `MovieService`, and `MovieController` classes.
 
-Here’s a series of 20-30 small challenges, each focusing on a specific aspect of the Movie API, designed to gradually build up the full system. Each challenge is designed to ensure you can validate progress at each step, with minimal complexity.
+2. **Update GET Endpoint**: Modify the existing GET endpoint in `MovieController` to return all movies instead of "Hello, Movie API!".
+
+3. **Implement getMovieById**: Add a method in `MovieService` to get a movie by ID and create a corresponding GET endpoint in `MovieController`.
+
+4. **Create POST Endpoint**: Implement the `createMovie` method in `MovieService` and add a POST endpoint in `MovieController` to create a new movie.
+
+5. **Implement updateMovie**: Add a method in `MovieService` to update a movie and create a corresponding PUT endpoint in `MovieController`.
+
+6. **Implement deleteMovie**: Add a method in `MovieService` to delete a movie and create a corresponding DELETE endpoint in `MovieController`.
+
+7. **Exception Handling**: Create a `ResourceNotFoundException` class and use it in the `getMovieById` method when a movie is not found.
+
+8. **Validation**: Add validation annotations to the `Movie` entity (e.g., `@NotBlank` for title, `@Min` and `@Max` for rating).
+
+9. **Handle Validation**: Update the controller to handle validation errors and return appropriate error responses.
+
+10. **Custom Query - Find by Title**: Add a method in `MovieRepository` to find movies by title (case-insensitive, partial match).
+
+11. **Title Search Endpoint**: Implement a method in `MovieService` to use the new repository method for title search and add a corresponding endpoint in `MovieController`.
+
+12. **Custom Query - Find by Genre**: Add a method in `MovieRepository` to find movies by genre.
+
+13. **Genre Search Endpoint**: Implement a method in `MovieService` to use the new repository method for genre search and add a corresponding endpoint in `MovieController`.
+
+14. **Custom Query - Find by Minimum Rating**: Add a method in `MovieRepository` to find movies with a rating greater than or equal to a given value.
+
+15. **Rating Search Endpoint**: Implement a method in `MovieService` to use the new repository method for rating search and add a corresponding endpoint in `MovieController`.
+
+16. **Custom Query - Find by Release Date Range**: Add a method in `MovieRepository` to find movies released between two dates.
+
+17. **Date Range Search Endpoint**: Implement a method in `MovieService` to use the new repository method for date range search and add a corresponding endpoint in `MovieController`.
+
+18. **Unified Search Endpoint**: Create a single search endpoint in `MovieController` that can handle all search types (title, genre, rating, date range).
+
+19. **Pagination**: Update the "Get All Movies" endpoint to support pagination.
+
+20. **Sorting**: Add sorting capability to the "Get All Movies" endpoint.
+
+21. **CORS Configuration**: Add a basic CORS configuration to allow requests from all origins.
+
+22. **Logging**: Add logging statements to the service methods.
+
+23. **Unit Test - MovieService**: Write a unit test for the `createMovie` method in `MovieService`.
+
+24. **Unit Test - MovieController**: Write a unit test for the POST endpoint in `MovieController`.
+
+25. **Integration Test**: Write an integration test for creating and retrieving a movie.
+
+26. **Data Initialization**: Create a `DataInitializer` class to populate the database with some initial movies on application startup.
+
+27. **API Documentation**: Add Swagger annotations to document the API endpoints.
+
+28. **Custom Validation**: Create a custom validation annotation for the movie genre (e.g., to check against a list of valid genres).
+
+29. **Error Handling**: Implement a global exception handler to standardize error responses.
+
+30. **API Versioning**: Implement basic API versioning (e.g., v1) in the URL path.
+
+31. **Caching**: Add caching to the "Get Movie by ID" endpoint.
+
+32. **Actuator**: Add and configure Spring Boot Actuator for basic application monitoring.
+
+33. **Custom Actuator Endpoint**: Create a custom Actuator endpoint that returns the count of movies in the database.
+
+34. **Request Logging**: Implement a filter to log incoming HTTP requests.
+
+35. **Response Compression**: Enable and configure response compression for the API.
+
+36. **Database Indexing**: Add appropriate indexes to the `Movie` table for improved query performance.
+
+37. **API Rate Limiting**: Implement basic rate limiting for API requests.
+
+38. **Asynchronous Processing**: Convert a synchronous operation (e.g., creating a movie) to an asynchronous one using `@Async`.
+
+39. **Batch Operations**: Implement a batch insert/update operation for movies.
+
+40. **API Metrics**: Add custom metrics to track API usage (e.g., number of movies created, retrieved).
+
+These challenges build upon the existing code and gradually introduce more advanced concepts and features. Students can validate their progress after each step by testing the new functionality they've just added.
 
 ---
 
