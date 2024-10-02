@@ -1,3 +1,5 @@
+https://docs.spring.io/spring-boot/tutorial/first-application/index.html
+
 Let's go step by step, starting with setting up the project in **Spring Initializer**, and then gradually adding features, including a simple POST request, a basic entity, and a mock service layer.
 
 ---
