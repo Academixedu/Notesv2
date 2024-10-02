@@ -7,6 +7,7 @@ https://github.com/gonchigars/batch8backend.git
 2. **Dependency Injection (DI)**: Evident in the `controller` and `movieserives` classes. Constructor-based DI is used, allowing Spring to inject dependencies automatically.
 
    Example:
+
    ```java
    public controller(movieserives ms) {
        this.ms = ms;
@@ -61,17 +62,12 @@ These Spring Boot concepts work together to create a robust, maintainable, and e
 5. Database (e.g., H2, MySQL, PostgreSQL)
 
 Key Points:
+
 - Jakarta EE (formerly Java EE) provides the specifications, including Jakarta Persistence (JPA).
 - Spring Data JPA is built on top of JPA, providing additional conveniences.
 - Hibernate is a popular implementation of the JPA specification.
 - Spring Boot autoconfigures all these components to work together seamlessly.
-
-Excellent question! Without Spring Boot, the configuration process becomes more manual and explicit. Let's break down how you would configure and use Jakarta EE (JPA) with Hibernate without Spring Boot.
-
-
-
-
-
+- Spring Boot also provides a convenient way to manage the persistence layer.
 
 # Configuring JPA and Hibernate without Spring Boot
 
@@ -89,14 +85,14 @@ For Maven (`pom.xml`):
         <artifactId>jakarta.persistence-api</artifactId>
         <version>3.1.0</version>
     </dependency>
-    
+
     <!-- Hibernate Core (JPA Provider) -->
     <dependency>
         <groupId>org.hibernate.orm</groupId>
         <artifactId>hibernate-core</artifactId>
         <version>6.2.0.Final</version>
     </dependency>
-    
+
     <!-- Database Driver (e.g., H2) -->
     <dependency>
         <groupId>com.h2database</groupId>
@@ -242,29 +238,27 @@ public class MovieApp {
 
 This setup gives you more control but requires more boilerplate code and careful resource management.
 
-
-
 Now, let me summarize the key points about configuring JPA and Hibernate without Spring Boot:
 
-1. **Manual Dependency Management**: 
+1. **Manual Dependency Management**:
    You need to explicitly add dependencies for JPA API, Hibernate, and your database driver.
 
-2. **Configuration File**: 
+2. **Configuration File**:
    A `persistence.xml` file is required to configure the persistence unit, including database connection details and Hibernate properties.
 
-3. **EntityManagerFactory**: 
+3. **EntityManagerFactory**:
    You need to manually create and manage the EntityManagerFactory, often using a utility class.
 
-4. **Data Access Objects (DAOs)**: 
+4. **Data Access Objects (DAOs)**:
    Instead of Spring Data repositories, you typically create DAOs that use the EntityManager directly to perform database operations.
 
-5. **Transaction Management**: 
+5. **Transaction Management**:
    You must explicitly begin, commit, and rollback transactions in your code.
 
-6. **Resource Management**: 
+6. **Resource Management**:
    Careful management of resources (like closing EntityManagers) becomes your responsibility.
 
-7. **Lack of Autoconfiguration**: 
+7. **Lack of Autoconfiguration**:
    You need to be explicit about many configurations that Spring Boot would typically handle automatically.
 
 The main differences from a Spring Boot setup are:
@@ -277,6 +271,3 @@ The main differences from a Spring Boot setup are:
 This approach gives you more control but requires more work and deeper understanding of JPA and Hibernate. It's commonly used in Java EE environments or when you need fine-grained control over your persistence layer.
 
 Spring Boot, by contrast, aims to simplify this setup process by providing sensible defaults and autoconfiguration, allowing developers to get started quickly with less boilerplate code.
-
-
-
