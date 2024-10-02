@@ -38,6 +38,9 @@ Frameworks and Libraries Used by Spring Boot
       │   └── Building hypermedia-driven RESTful web services  
       └── Project Lombok  
           └── Reduces boilerplate code with annotations like @Data
+
+
+          
 Let's go step by step, starting with setting up the project in **Spring Initializer**, and then gradually adding features, including a simple POST request, a basic entity, and a mock service layer.
 
 ---
