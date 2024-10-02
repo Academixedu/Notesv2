@@ -1301,3 +1301,741 @@ Using DTOs decouples the API layer from the persistence layer, allows for custom
 # Conclusion
 
 These 100 questions and answers cover a comprehensive range of topics related to the Movie API project. They are designed to test your understanding of the implementation details, best practices, and architectural decisions made in building a Spring Boot RESTful API using Spring Data JPA. Reviewing and answering these questions should reinforce your knowledge and help identify areas where further study might be beneficial.
+
+---------------------------------------
+
+# Building a Movie API with Spring Boot and JPA: Step by Step
+
+In this exercise, we'll build a Movie API step by step using Spring Boot and Spring Data JPA. At each step, we'll ask and answer questions to verify our understanding before proceeding. This approach will help us understand how libraries are used, how auto-configuration works, exception handling, database connections, updates, and other essential details.
+
+---
+
+## Table of Contents
+
+1. [Project Setup](#1-project-setup)
+2. [Application Entry Point](#2-application-entry-point)
+3. [Creating the Movie Entity](#3-creating-the-movie-entity)
+4. [Defining the Repository](#4-defining-the-repository)
+5. [Implementing the Service Layer](#5-implementing-the-service-layer)
+6. [Building the Controller](#6-building-the-controller)
+7. [Exception Handling](#7-exception-handling)
+8. [Configuration and Properties](#8-configuration-and-properties)
+9. [Testing the API](#9-testing-the-api)
+10. [Conclusion](#10-conclusion)
+
+---
+
+## 1. Project Setup
+
+### **Step 1: Initialize the Project**
+
+Use the Spring Initializr to create a new Maven project:
+
+- **Project**: Maven Project
+- **Language**: Java
+- **Spring Boot**: Latest stable version
+- **Group**: `com.example`
+- **Artifact**: `movieapi`
+- **Name**: `Movie API`
+- **Package Name**: `com.example.movieapi`
+- **Packaging**: Jar
+- **Java Version**: 11 (or your preferred version)
+
+### **Step 2: Add Dependencies**
+
+Include the following dependencies:
+
+- **Spring Web**: For building web applications and RESTful services.
+- **Spring Data JPA**: For database access using JPA.
+- **H2 Database**: An in-memory database for development and testing.
+- **Lombok** (optional): To reduce boilerplate code with annotations.
+- **Spring Boot DevTools** (optional): Provides automatic restarts and live reload.
+- **Validation**: For data validation (part of Spring Boot Starter Web).
+
+### **Questions and Answers**
+
+**Q1: Why do we include Spring Web and Spring Data JPA dependencies?**
+
+**A1:** We include **Spring Web** to build web applications and RESTful APIs, providing MVC architecture and RESTful services. **Spring Data JPA** simplifies data access layers by providing repository support and database interaction using Java Persistence API (JPA).
+
+---
+
+**Q2: What is the purpose of including the H2 Database in our project?**
+
+**A2:** H2 Database is an in-memory relational database. Including it allows us to develop and test our application without needing to set up an external database. It simplifies development and testing.
+
+---
+
+**Q3: How does Lombok help in our project?**
+
+**A3:** Lombok reduces boilerplate code by generating getters, setters, constructors, and other methods at compile time using annotations like `@Getter`, `@Setter`, `@AllArgsConstructor`, etc. This makes the code cleaner and more maintainable.
+
+---
+
+## 2. Application Entry Point
+
+### **MovieApiApplication.java**
+
+```java
+package com.example.movieapi;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class MovieApiApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(MovieApiApplication.class, args);
+    }
+}
+```
+
+### **Explanation**
+
+- `@SpringBootApplication` is a convenience annotation that combines:
+
+  - `@Configuration`: Indicates that the class can be used by the Spring IoC container as a source of bean definitions.
+  - `@EnableAutoConfiguration`: Tells Spring Boot to start adding beans based on classpath settings, other beans, and various property settings.
+  - `@ComponentScan`: Tells Spring to look for other components, configurations, and services in the `com.example.movieapi` package, allowing it to find the controllers.
+
+### **Questions and Answers**
+
+**Q4: What is the role of the `main` method in the `MovieApiApplication` class?**
+
+**A4:** The `main` method serves as the entry point of the application. It invokes `SpringApplication.run()`, which bootstraps the Spring Boot application, starts the embedded server (like Tomcat), and initializes all components.
+
+---
+
+**Q5: How does `@SpringBootApplication` simplify our configuration?**
+
+**A5:** `@SpringBootApplication` combines three annotations (`@Configuration`, `@EnableAutoConfiguration`, and `@ComponentScan`) into one. This reduces the amount of boilerplate code and simplifies the setup by enabling component scanning and auto-configuration.
+
+---
+
+## 3. Creating the Movie Entity
+
+### **Movie.java**
+
+```java
+package com.example.movieapi.entity;
+
+import javax.persistence.*;
+import javax.validation.constraints.*;
+import java.time.LocalDate;
+
+@Entity
+@Table(name = "movies")
+public class Movie {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotBlank(message = "Title is mandatory")
+    private String title;
+
+    private String description;
+
+    private String director;
+
+    private String genre;
+
+    @Min(value = 0, message = "Rating must be between 0 and 10")
+    @Max(value = 10, message = "Rating must be between 0 and 10")
+    private Double rating;
+
+    private LocalDate releaseDate;
+
+    // Constructors
+    public Movie() {
+    }
+
+    public Movie(String title, String description, String director, String genre, Double rating, LocalDate releaseDate) {
+        this.title = title;
+        this.description = description;
+        this.director = director;
+        this.genre = genre;
+        this.rating = rating;
+        this.releaseDate = releaseDate;
+    }
+
+    // Getters and Setters (Use Lombok annotations if included)
+    // @Getter and @Setter annotations can be used if Lombok is included
+}
+```
+
+### **Explanation**
+
+- `@Entity`: Marks the class as a JPA entity mapped to a database table.
+- `@Table(name = "movies")`: Specifies the table name in the database.
+- `@Id`: Marks the primary key of the entity.
+- `@GeneratedValue(strategy = GenerationType.IDENTITY)`: Indicates that the primary key value will be generated automatically by the database.
+- Validation annotations like `@NotBlank`, `@Min`, and `@Max` enforce data integrity.
+
+### **Questions and Answers**
+
+**Q6: What is the purpose of the `@Entity` annotation?**
+
+**A6:** The `@Entity` annotation specifies that the class is a JPA entity, meaning it's a Java class that maps to a table in the database. It allows the class to be managed by the JPA provider (e.g., Hibernate).
+
+---
+
+**Q7: Why do we use `@Table(name = "movies")`?**
+
+**A7:** `@Table(name = "movies")` specifies the exact name of the database table to which the entity will be mapped. If omitted, the table name defaults to the class name.
+
+---
+
+**Q8: How do the validation annotations help in our entity?**
+
+**A8:** Validation annotations ensure that the data adheres to specified rules before it's persisted to the database. For example, `@NotBlank` ensures that the `title` field is not null or empty, and `@Min` and `@Max` enforce that the `rating` is between 0 and 10.
+
+---
+
+## 4. Defining the Repository
+
+### **MovieRepository.java**
+
+```java
+package com.example.movieapi.repository;
+
+import com.example.movieapi.entity.Movie;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@Repository
+public interface MovieRepository extends JpaRepository<Movie, Long> {
+
+    List<Movie> findByTitleContainingIgnoreCase(String title);
+
+    List<Movie> findByGenre(String genre);
+
+    @Query("SELECT m FROM Movie m WHERE m.rating >= :rating")
+    List<Movie> findByRatingGreaterThanEqual(@Param("rating") Double rating);
+
+    @Query("SELECT m FROM Movie m WHERE m.releaseDate BETWEEN :startDate AND :endDate")
+    List<Movie> findByReleaseDateBetween(
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate);
+}
+```
+
+### **Explanation**
+
+- Extending `JpaRepository<Movie, Long>` provides CRUD operations and JPA-related methods.
+- `@Repository` is a stereotype annotation indicating that the interface is a repository.
+- Custom query methods:
+
+  - Method names like `findByTitleContainingIgnoreCase` allow Spring Data JPA to generate queries automatically.
+  - `@Query` annotations define custom JPQL queries for more complex operations.
+  - `@Param` binds method parameters to named parameters in the query.
+
+### **Questions and Answers**
+
+**Q9: What benefits do we get from extending `JpaRepository`?**
+
+**A9:** Extending `JpaRepository` provides us with built-in CRUD operations, pagination, and sorting capabilities without writing boilerplate code. It simplifies data access and manipulation.
+
+---
+
+**Q10: How does Spring Data JPA interpret method names like `findByTitleContainingIgnoreCase`?**
+
+**A10:** Spring Data JPA parses the method name and creates a query based on it. `findByTitleContainingIgnoreCase` translates to a SQL `LIKE` query that searches for movies where the title contains a specified string, ignoring case.
+
+---
+
+**Q11: When should we use the `@Query` annotation?**
+
+**A11:** We use `@Query` when we need custom JPQL or SQL queries that cannot be derived from method names. It provides more flexibility for complex queries.
+
+---
+
+## 5. Implementing the Service Layer
+
+### **MovieService.java**
+
+```java
+package com.example.movieapi.service;
+
+import com.example.movieapi.entity.Movie;
+import com.example.movieapi.exception.ResourceNotFoundException;
+import com.example.movieapi.repository.MovieRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class MovieService {
+
+    private final MovieRepository movieRepository;
+
+    // Constructor-based Dependency Injection
+    public MovieService(MovieRepository movieRepository) {
+        this.movieRepository = movieRepository;
+    }
+
+    // CRUD Operations
+    public List<Movie> getAllMovies() {
+        return movieRepository.findAll();
+    }
+
+    public Optional<Movie> getMovieById(Long id) {
+        return movieRepository.findById(id);
+    }
+
+    public Movie createMovie(Movie movie) {
+        return movieRepository.save(movie);
+    }
+
+    @Transactional
+    public Movie updateMovie(Long id, Movie movieDetails) {
+        Movie movie = movieRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Movie not found with id " + id));
+
+        movie.setTitle(movieDetails.getTitle());
+        movie.setDescription(movieDetails.getDescription());
+        movie.setDirector(movieDetails.getDirector());
+        movie.setGenre(movieDetails.getGenre());
+        movie.setRating(movieDetails.getRating());
+        movie.setReleaseDate(movieDetails.getReleaseDate());
+
+        return movie; // Changes will be persisted when the transaction commits
+    }
+
+    public void deleteMovie(Long id) {
+        if (!movieRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Movie not found with id " + id);
+        }
+        movieRepository.deleteById(id);
+    }
+
+    // Search Methods
+    public List<Movie> searchMoviesByTitle(String title) {
+        return movieRepository.findByTitleContainingIgnoreCase(title);
+    }
+
+    public List<Movie> searchMoviesByGenre(String genre) {
+        return movieRepository.findByGenre(genre);
+    }
+
+    public List<Movie> searchMoviesByRating(Double rating) {
+        return movieRepository.findByRatingGreaterThanEqual(rating);
+    }
+
+    public List<Movie> searchMoviesByReleaseDateRange(LocalDate startDate, LocalDate endDate) {
+        return movieRepository.findByReleaseDateBetween(startDate, endDate);
+    }
+}
+```
+
+### **Explanation**
+
+- `@Service` indicates that this class is a service component in the business logic layer.
+- Constructor-based dependency injection is used for `MovieRepository`.
+- `@Transactional` ensures that the `updateMovie` method executes within a transaction.
+- Business logic is encapsulated in the service layer, separating it from controllers and repositories.
+
+### **Questions and Answers**
+
+**Q12: Why do we use constructor-based dependency injection in `MovieService`?**
+
+**A12:** Constructor-based injection is recommended because it makes the dependencies explicit and allows for immutable fields. It also facilitates easier testing and ensures that the service cannot be instantiated without its required dependencies.
+
+---
+
+**Q13: What is the purpose of the `@Transactional` annotation on the `updateMovie` method?**
+
+**A13:** `@Transactional` ensures that all database operations within the `updateMovie` method are executed within a single transaction. If any operation fails, the entire transaction is rolled back, maintaining data integrity.
+
+---
+
+**Q14: How does the `updateMovie` method persist changes without explicitly calling a save method?**
+
+**A14:** Since the `Movie` entity is managed by the persistence context within a transaction, any changes made to it are automatically detected and persisted when the transaction commits. This is a feature of JPA's entity management.
+
+---
+
+## 6. Building the Controller
+
+### **MovieController.java**
+
+```java
+package com.example.movieapi.controller;
+
+import com.example.movieapi.entity.Movie;
+import com.example.movieapi.exception.ResourceNotFoundException;
+import com.example.movieapi.service.MovieService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.validation.Valid;
+import java.time.LocalDate;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/movies")
+@Validated
+public class MovieController {
+
+    private final MovieService movieService;
+
+    // Constructor-based Dependency Injection
+    public MovieController(MovieService movieService) {
+        this.movieService = movieService;
+    }
+
+    // Get All Movies
+    @GetMapping
+    public List<Movie> getAllMovies() {
+        return movieService.getAllMovies();
+    }
+
+    // Get Movie by ID
+    @GetMapping("/{id}")
+    public ResponseEntity<Movie> getMovieById(@PathVariable Long id) {
+        Movie movie = movieService.getMovieById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Movie not found with id " + id));
+        return ResponseEntity.ok(movie);
+    }
+
+    // Create New Movie
+    @PostMapping
+    public ResponseEntity<Movie> createMovie(@Valid @RequestBody Movie movie) {
+        Movie savedMovie = movieService.createMovie(movie);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedMovie);
+    }
+
+    // Update Movie
+    @PutMapping("/{id}")
+    public ResponseEntity<Movie> updateMovie(
+            @PathVariable Long id, @Valid @RequestBody Movie movieDetails) {
+        Movie updatedMovie = movieService.updateMovie(id, movieDetails);
+        return ResponseEntity.ok(updatedMovie);
+    }
+
+    // Delete Movie
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteMovie(@PathVariable Long id) {
+        movieService.deleteMovie(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    // Search Movies
+    @GetMapping("/search")
+    public List<Movie> searchMovies(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String genre,
+            @RequestParam(required = false) Double rating,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+
+        if (title != null) {
+            return movieService.searchMoviesByTitle(title);
+        } else if (genre != null) {
+            return movieService.searchMoviesByGenre(genre);
+        } else if (rating != null) {
+            return movieService.searchMoviesByRating(rating);
+        } else if (startDate != null && endDate != null) {
+            return movieService.searchMoviesByReleaseDateRange(startDate, endDate);
+        } else {
+            return movieService.getAllMovies();
+        }
+    }
+}
+```
+
+### **Explanation**
+
+- `@RestController` combines `@Controller` and `@ResponseBody`, indicating that the controller returns JSON/XML responses.
+- `@RequestMapping("/api/movies")` sets the base path for all endpoints in this controller.
+- `@Validated` enables method-level validation.
+- `@Valid` ensures that the `Movie` object is validated before processing.
+- `ResponseEntity` allows us to control the HTTP status code and headers.
+
+### **Questions and Answers**
+
+**Q15: What is the difference between `@Controller` and `@RestController`?**
+
+**A15:** `@Controller` is used in MVC applications and returns views (like HTML pages). `@RestController` is a convenience annotation that combines `@Controller` and `@ResponseBody`, indicating that the methods return data directly in the response body (e.g., JSON).
+
+---
+
+**Q16: How does `@Valid` work in the `createMovie` and `updateMovie` methods?**
+
+**A16:** `@Valid` triggers the validation process for the `Movie` object based on the validation annotations in the `Movie` class. If validation fails, a `MethodArgumentNotValidException` is thrown.
+
+---
+
+**Q17: Why do we use `ResponseEntity` in some methods?**
+
+**A17:** `ResponseEntity` allows us to customize the HTTP response, including status codes and headers. It provides more flexibility compared to returning the object directly.
+
+---
+
+**Q18: How does the `searchMovies` method handle multiple search criteria?**
+
+**A18:** The method checks which request parameters are not `null` and calls the corresponding service method. This allows for flexible search capabilities based on the provided parameters.
+
+---
+
+## 7. Exception Handling
+
+### **ResourceNotFoundException.java**
+
+```java
+package com.example.movieapi.exception;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(value = HttpStatus.NOT_FOUND)
+public class ResourceNotFoundException extends RuntimeException {
+
+    public ResourceNotFoundException(String message) {
+        super(message);
+    }
+}
+```
+
+### **Explanation**
+
+- Custom exception that extends `RuntimeException`.
+- `@ResponseStatus(HttpStatus.NOT_FOUND)` indicates that when this exception is thrown, the HTTP status code should be 404 (Not Found).
+
+### **Questions and Answers**
+
+**Q19: What happens when `ResourceNotFoundException` is thrown in the controller?**
+
+**A19:** When `ResourceNotFoundException` is thrown, the controller returns a response with HTTP status 404 (Not Found) and the exception's message in the response body.
+
+---
+
+**Q20: How can we handle exceptions globally in the application?**
+
+**A20:** We can create a class annotated with `@ControllerAdvice` and define methods with `@ExceptionHandler` annotations to handle exceptions globally, providing custom responses for different exception types.
+
+---
+
+### **GlobalExceptionHandler.java** (Optional)
+
+```java
+package com.example.movieapi.exception;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
+import javax.validation.ConstraintViolationException;
+
+@ControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<?> resourceNotFoundException(ResourceNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<?> constraintViolationException(ConstraintViolationException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> globalExceptionHandler(Exception ex) {
+        return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+```
+
+---
+
+## 8. Configuration and Properties
+
+### **application.properties**
+
+```properties
+# H2 Database Configuration
+spring.datasource.url=jdbc:h2:mem:moviesdb
+spring.datasource.driverClassName=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+
+# Hibernate Configuration
+spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+spring.jpa.hibernate.ddl-auto=update
+
+# Show SQL statements in the console
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+
+# H2 Console Configuration
+spring.h2.console.enabled=true
+spring.h2.console.path=/h2-console
+```
+
+### **Explanation**
+
+- **Data Source Configuration**: Sets up the in-memory H2 database.
+- `spring.jpa.hibernate.ddl-auto=update`: Automatically updates the database schema based on the entities.
+- `spring.jpa.show-sql=true`: Enables logging of SQL statements.
+- `spring.h2.console.enabled=true`: Enables the H2 database console at `/h2-console`.
+
+### **Questions and Answers**
+
+**Q21: What is the purpose of `spring.jpa.hibernate.ddl-auto=update`?**
+
+**A21:** It tells Hibernate to automatically update the database schema to match the entities each time the application runs. It creates tables and alters existing ones without dropping data.
+
+---
+
+**Q22: Why do we enable the H2 console?**
+
+**A22:** Enabling the H2 console allows us to access the in-memory database through a web interface at `/h2-console`, which is useful for debugging and inspecting the database during development.
+
+---
+
+**Q23: How does auto-configuration work in Spring Boot regarding the database connection?**
+
+**A23:** Spring Boot's auto-configuration detects the presence of the H2 database and the JPA dependency on the classpath. It automatically configures a `DataSource`, `EntityManagerFactory`, and `TransactionManager` using sensible defaults based on the properties provided.
+
+---
+
+## 9. Testing the API
+
+### **Using Postman or cURL**
+
+- **Retrieve All Movies**
+
+  - **Request**: `GET http://localhost:8080/api/movies`
+
+- **Retrieve a Movie by ID**
+
+  - **Request**: `GET http://localhost:8080/api/movies/{id}`
+
+- **Create a New Movie**
+
+  - **Request**: `POST http://localhost:8080/api/movies`
+  - **Headers**: `Content-Type: application/json`
+  - **Body**:
+
+    ```json
+    {
+      "title": "Inception",
+      "description": "A mind-bending thriller",
+      "director": "Christopher Nolan",
+      "genre": "Sci-Fi",
+      "rating": 8.8,
+      "releaseDate": "2010-07-16"
+    }
+    ```
+
+- **Update an Existing Movie**
+
+  - **Request**: `PUT http://localhost:8080/api/movies/{id}`
+  - **Headers**: `Content-Type: application/json`
+  - **Body**: (Similar to create)
+
+- **Delete a Movie**
+
+  - **Request**: `DELETE http://localhost:8080/api/movies/{id}`
+
+- **Search Movies**
+
+  - By Title: `GET http://localhost:8080/api/movies/search?title=Inception`
+  - By Genre: `GET http://localhost:8080/api/movies/search?genre=Sci-Fi`
+  - By Rating: `GET http://localhost:8080/api/movies/search?rating=8`
+  - By Release Date Range: `GET http://localhost:8080/api/movies/search?startDate=2010-01-01&endDate=2010-12-31`
+
+### **Questions and Answers**
+
+**Q24: How can we test the validation constraints on the `Movie` entity?**
+
+**A24:** By sending requests with invalid data (e.g., missing the `title` field or setting a rating outside the 0-10 range) and observing if the application returns appropriate validation error messages and HTTP 400 Bad Request responses.
+
+---
+
+**Q25: What happens if we try to retrieve or delete a movie that doesn't exist?**
+
+**A25:** The application will throw a `ResourceNotFoundException`, which results in an HTTP 404 Not Found response due to the exception handling mechanism we set up.
+
+---
+
+**Q26: How can we access the H2 database console, and what is it used for?**
+
+**A26:** By navigating to `http://localhost:8080/h2-console` in a web browser. It is used for inspecting and querying the in-memory database, which is helpful for debugging and verifying data.
+
+---
+
+## 10. Conclusion
+
+By building the Movie API step by step and asking questions along the way, we've:
+
+- **Understood the use of key Spring annotations** like `@SpringBootApplication`, `@Entity`, `@Repository`, `@Service`, and `@RestController`.
+- **Learned how auto-configuration works in Spring Boot**, simplifying our setup by automatically configuring beans based on the classpath and properties.
+- **Explored exception handling** using custom exceptions and the `@ControllerAdvice` mechanism.
+- **Implemented validation** to ensure data integrity.
+- **Managed database connections and updates** using Spring Data JPA and H2 database.
+- **Tested the API** to verify functionality and validation.
+
+---
+
+### **Final Questions and Answers**
+
+**Q27: How does Spring Boot simplify the development of applications like our Movie API?**
+
+**A27:** Spring Boot simplifies development by providing auto-configuration, starter dependencies, and embedded servers. This reduces boilerplate code and configuration, allowing developers to focus on writing business logic.
+
+---
+
+**Q28: What are the benefits of structuring the application into layers (entity, repository, service, controller)?**
+
+**A28:** Layered architecture promotes separation of concerns, making the codebase more modular, maintainable, and testable. Each layer has a specific responsibility, which enhances readability and scalability.
+
+---
+
+**Q29: How does dependency injection benefit our application design?**
+
+**A29:** Dependency injection decouples component creation from component usage, making the code more flexible and easier to test. It allows for loose coupling and better management of dependencies.
+
+---
+
+**Q30: What is the significance of using an in-memory database like H2 during development?**
+
+**A30:** An in-memory database like H2 allows for quick setup and testing without the overhead of configuring an external database. It speeds up development and is ideal for small to medium-sized projects or prototyping.
+
+---
+
+# Conclusion
+
+By completing this step-by-step exercise with questions and answers, we've gained a comprehensive understanding of how to build a RESTful API using Spring Boot and Spring Data JPA. We explored:
+
+- **Project setup and dependency management**
+- **Application entry point and auto-configuration**
+- **Entity creation and data validation**
+- **Repository definition and custom queries**
+- **Service layer implementation with transaction management**
+- **Controller development following REST principles**
+- **Exception handling strategies**
+- **Database configuration and connection management**
+- **Testing and validating the API**
+
+This approach not only helped us build the application but also reinforced key concepts at each stage, ensuring a deeper understanding of the technologies and best practices involved.
+
+Feel free to extend this application by adding features such as user authentication, pagination, sorting, or integrating with external APIs. Continue to explore and ask questions to enhance your mastery of Spring Boot and JPA.
+
+---
+
+If you have any further questions or need clarification on any of the steps, don't hesitate to ask!
