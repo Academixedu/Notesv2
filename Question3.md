@@ -1,139 +1,139 @@
 # Spring Boot and JPA: Overview
+
+├── @SpringBootApplication  
+│   ├── Combines three main annotations:  
+│   │   ├── @Configuration  
+│   │   ├── @EnableAutoConfiguration  
+│   │   └── @ComponentScan  
+│   └── Purpose:  
+│       └── Enables component scanning and auto-configuration  
 │
-├── @SpringBootApplication
-│     ├── Combines three main annotations:
-│     │     ├── @Configuration
-│     │     ├── @EnableAutoConfiguration
-│     │     └── @ComponentScan
-│     └── Purpose:
-│           └── Enables component scanning and auto-configuration
+├── Stereotype Annotations  
+│   ├── @RestController  
+│   │   ├── Combines @Controller and @ResponseBody  
+│   │   └── Specialized for RESTful web services  
+│   ├── @Service  
+│   │   ├── Marks a class as a service provider  
+│   │   └── Specialization of @Component for business logic  
+│   └── @Repository  
+│       ├── Indicates a data access component  
+│       ├── Enables exception translation  
+│       └── Specialization of @Component  
 │
-├── Stereotype Annotations
-│     ├── @RestController
-│     │     ├── Combines @Controller and @ResponseBody
-│     │     └── Specialized for RESTful web services
-│     ├── @Service
-│     │     ├── Marks a class as a service provider
-│     │     └── Specialization of @Component for business logic
-│     └── @Repository
-│           ├── Indicates a data access component
-│           ├── Enables exception translation
-│           └── Specialization of @Component
+├── Spring Data JPA and Repositories  
+│   ├── Repository Interface  
+│   │   ├── Extends JpaRepository<Entity, ID>  
+│   │   ├── Provides CRUD operations  
+│   │   └── Example:  
+│   │       └── public interface MovieRepo extends JpaRepository<Movie, Long> {...}  
+│   ├── Automatic Implementation  
+│   │   ├── Spring scans for interfaces extending JpaRepository  
+│   │   ├── Creates proxy implementations at runtime  
+│   │   └── Injects proxies into dependent classes  
+│   ├── Custom Query Methods  
+│   │   ├── @Query annotation for custom JPQL or SQL queries  
+│   │   ├── Method name conventions for query derivation  
+│   │   └── Use of @Param for parameter binding  
+│   └── Transaction Management  
+│       ├── @Transactional annotation  
+│       └── @Modifying for write operations  
 │
-├── Spring Data JPA and Repositories
-│     ├── Repository Interface
-│     │     ├── Extends JpaRepository<Entity, ID>
-│     │     ├── Provides CRUD operations
-│     │     └── Example:
-│     │           └── public interface MovieRepo extends JpaRepository<Movie, Long> {...}
-│     ├── Automatic Implementation
-│     │     ├── Spring scans for interfaces extending JpaRepository
-│     │     ├── Creates proxy implementations at runtime
-│     │     └── Injects proxies into dependent classes
-│     ├── Custom Query Methods
-│     │     ├── @Query annotation for custom JPQL or SQL queries
-│     │     ├── Method name conventions for query derivation
-│     │     └── Use of @Param for parameter binding
-│     └── Transaction Management
-│           ├── @Transactional annotation
-│           └── @Modifying for write operations
+├── Dependency Injection  
+│   ├── Handled automatically for beans  
+│   ├── Constructor-based injection recommended  
+│   ├── Benefits:  
+│   │   ├── Immutability  
+│   │   ├── Testability  
+│   │   └── Clear contracts  
+│   └── Example:  
+│       └── public class MovieService { private final MovieRepo repo; ... }  
 │
-├── Dependency Injection
-│     ├── Handled automatically for beans
-│     ├── Constructor-based injection recommended
-│     ├── Benefits:
-│     │     ├── Immutability
-│     │     ├── Testability
-│     │     └── Clear contracts
-│     └── Example:
-│           └── public class MovieService { private final MovieRepo repo; ... }
+├── JPA Entities and Annotations  
+│   ├── @Entity  
+│   │   ├── Marks a class as a JPA entity  
+│   │   └── Mapped to a database table  
+│   ├── @Table  
+│   │   └── Specifies custom table name  
+│   ├── @Id  
+│   │   └── Denotes the primary key field  
+│   ├── @GeneratedValue  
+│   │   └── Specifies primary key generation strategy  
+│   ├── @Column  
+│   │   └── Customizes column mapping  
+│   └── Field Validation  
+│       └── Annotations like @NotBlank, @Email for validation  
 │
-├── JPA Entities and Annotations
-│     ├── @Entity
-│     │     ├── Marks a class as a JPA entity
-│     │     └── Mapped to a database table
-│     ├── @Table
-│     │     └── Specifies custom table name
-│     ├── @Id
-│     │     └── Denotes the primary key field
-│     ├── @GeneratedValue
-│     │     └── Specifies primary key generation strategy
-│     ├── @Column
-│     │     └── Customizes column mapping
-│     └── Field Validation
-│           └── Annotations like @NotBlank, @Email for validation
+├── Custom Queries with @Query  
+│   ├── Defining custom JPQL or native SQL queries  
+│   ├── @Query annotation usage  
+│   ├── JPQL vs Native SQL  
+│   │   ├── JPQL: Object-oriented, database-independent  
+│   │   └── Native SQL: Database-specific syntax  
+│   └── Example:  
+│       ├── JPQL: @Query("SELECT m FROM Movie m WHERE m.year > :year")  
+│       └── Native SQL: @Query(value = "SELECT * FROM movies WHERE year > :year", nativeQuery = true)  
 │
-├── Custom Queries with @Query
-│     ├── Defining custom JPQL or native SQL queries
-│     ├── @Query annotation usage
-│     ├── JPQL vs Native SQL
-│     │     ├── JPQL: Object-oriented, database-independent
-│     │     └── Native SQL: Database-specific syntax
-│     └── Example:
-│           ├── JPQL: @Query("SELECT m FROM Movie m WHERE m.year > :year")
-│           └── Native SQL: @Query(value = "SELECT * FROM movies WHERE year > :year", nativeQuery = true)
+├── Transaction Management  
+│   ├── @Transactional Annotation  
+│   │   ├── Manages transaction boundaries  
+│   │   ├── Can be applied at method or class level  
+│   │   └── Spring uses AOP proxies for transaction management  
+│   └── Example:  
+│       └── @Transactional public void updateMovie(Movie movie) { ... }  
 │
-├── Transaction Management
-│     ├── @Transactional Annotation
-│     │     ├── Manages transaction boundaries
-│     │     ├── Can be applied at method or class level
-│     │     └── Spring uses AOP proxies for transaction management
-│     └── Example:
-│           └── @Transactional public void updateMovie(Movie movie) { ... }
+├── Comparison: With and Without Spring Boot  
+│   ├── With Spring Boot:  
+│   │   ├── Auto-configuration simplifies setup  
+│   │   ├── Starter dependencies manage versions  
+│   │   ├── Reduced boilerplate code  
+│   │   └── Quick development and easy setup  
+│   └── Without Spring Boot:  
+│       ├── Manual configuration required  
+│       │   ├── persistence.xml for JPA settings  
+│       │   ├── EntityManagerFactory management  
+│       │   └── DAO classes for data access  
+│       ├── More boilerplate code  
+│       └── Potential for configuration errors  
 │
-├── Comparison: With and Without Spring Boot
-│     ├── With Spring Boot:
-│     │     ├── Auto-configuration simplifies setup
-│     │     ├── Starter dependencies manage versions
-│     │     ├── Reduced boilerplate code
-│     │     └── Quick development and easy setup
-│     └── Without Spring Boot:
-│           ├── Manual configuration required
-│           │     ├── persistence.xml for JPA settings
-│           │     ├── EntityManagerFactory management
-│           │     └── DAO classes for data access
-│           ├── More boilerplate code
-│           └── Potential for configuration errors
-│
-└── Frameworks and Libraries Used by Spring Boot
-      ├── Spring Framework
-      │     ├── Core support for dependency injection, AOP, etc.
-      │     └── Modules: Core, AOP, JDBC, ORM, Web MVC
-      ├── Spring Data
-      │     ├── Simplifies data access
-      │     └── Supports JPA, MongoDB, Redis, etc.
-      ├── Spring Security
-      │     └── Authentication and authorization features
-      ├── Hibernate ORM
-      │     └── Default JPA provider for ORM
-      ├── Embedded Servers
-      │     ├── Tomcat (default)
-      │     ├── Jetty
-      │     └── Undertow
-      ├── View Technologies
-      │     ├── Thymeleaf
-      │     └── Alternative: FreeMarker, JSP
-      ├── Jackson
-      │     └── JSON processing and serialization
-      ├── Logging Frameworks
-      │     ├── SLF4J
-      │     └── Logback
-      ├── Databases
-      │     ├── H2 Database (in-memory for testing)
-      │     └── Support for MySQL, PostgreSQL, etc.
-      ├── Testing Tools
-      │     ├── JUnit
-      │     └── Spring Test
-      ├── Actuator
-      │     └── Monitoring and management endpoints
-      ├── DevTools
-      │     └── Enhanced development experience
-      ├── Validation API
-      │     └── Data validation with Hibernate Validator
-      ├── Spring HATEOAS
-      │     └── Building hypermedia-driven RESTful web services
-      └── Project Lombok
-            └── Reduces boilerplate code with annotations like @Data
+└── Frameworks and Libraries Used by Spring Boot  
+      ├── Spring Framework  
+      │   ├── Core support for dependency injection, AOP, etc.  
+      │   └── Modules: Core, AOP, JDBC, ORM, Web MVC  
+      ├── Spring Data  
+      │   ├── Simplifies data access  
+      │   └── Supports JPA, MongoDB, Redis, etc.  
+      ├── Spring Security  
+      │   └── Authentication and authorization features  
+      ├── Hibernate ORM  
+      │   └── Default JPA provider for ORM  
+      ├── Embedded Servers  
+      │   ├── Tomcat (default)  
+      │   ├── Jetty  
+      │   └── Undertow  
+      ├── View Technologies  
+      │   ├── Thymeleaf  
+      │   └── Alternative: FreeMarker, JSP  
+      ├── Jackson  
+      │   └── JSON processing and serialization  
+      ├── Logging Frameworks  
+      │   ├── SLF4J  
+      │   └── Logback  
+      ├── Databases  
+      │   ├── H2 Database (in-memory for testing)  
+      │   └── Support for MySQL, PostgreSQL, etc.  
+      ├── Testing Tools  
+      │   ├── JUnit  
+      │   └── Spring Test  
+      ├── Actuator  
+      │   └── Monitoring and management endpoints  
+      ├── DevTools  
+      │   └── Enhanced development experience  
+      ├── Validation API  
+      │   └── Data validation with Hibernate Validator  
+      ├── Spring HATEOAS  
+      │   └── Building hypermedia-driven RESTful web services  
+      └── Project Lombok  
+          └── Reduces boilerplate code with annotations like @Data
 
 
 Key Takeaways:
