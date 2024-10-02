@@ -605,3 +605,214 @@ By now, you have implemented:
 5. **Monitoring using Actuator**.
 
 You can now continue by adding more features like pagination, custom queries, security, and more complex business logic, but you already have a fully functioning Movie API!
+
+
+Here’s a series of 20-30 small challenges, each focusing on a specific aspect of the Movie API, designed to gradually build up the full system. Each challenge is designed to ensure you can validate progress at each step, with minimal complexity.
+
+---
+
+### **Challenge 1: Project Setup**
+1. **Objective**: Set up a Spring Boot project.
+   - Go to Spring Initializr and create a Maven project with Spring Web as a dependency.
+   - Import the project into your IDE.
+   - Validate: Ensure the application starts successfully with no errors by running it.
+
+---
+
+### **Challenge 2: Application Entry Point**
+2. **Objective**: Add a main class to run the application.
+   - Add a class `MovieApiApplication` with the `@SpringBootApplication` annotation and a `main` method.
+   - Validate: The application should run on port `8080` and print logs that the Spring Boot application is starting.
+
+---
+
+### **Challenge 3: Basic Controller Setup**
+3. **Objective**: Create a simple REST controller.
+   - Create a class `MovieController` with a `@RestController` annotation.
+   - Add a `@GetMapping("/hello")` method that returns a simple greeting message.
+   - Validate: Visit `http://localhost:8080/hello` in the browser, and you should see the greeting message.
+
+---
+
+### **Challenge 4: POST Request with Raw Data**
+4. **Objective**: Handle POST requests with raw JSON data.
+   - Add a `@PostMapping("/movies")` method that accepts a raw `@RequestBody String`.
+   - Validate: Use Postman to send a POST request with a raw JSON string, and log the data to the console.
+
+---
+
+### **Challenge 5: Create Movie Class**
+5. **Objective**: Create a simple `Movie` class.
+   - Define a `Movie` class with fields: `id`, `title`, and `description`, including getters and setters.
+   - Validate: Replace the raw string in the `@PostMapping` method with `@RequestBody Movie` and ensure data is logged correctly.
+
+---
+
+### **Challenge 6: Mock Service Layer**
+6. **Objective**: Create a mock `MovieService` class.
+   - Add a `MovieService` class with a `saveMovie(Movie movie)` method.
+   - Validate: Call this service in the `MovieController` and print the received movie in the service layer.
+
+---
+
+### **Challenge 7: Add Validation to Movie Entity**
+7. **Objective**: Add validation annotations.
+   - Add `@NotBlank` for the `title` field in `Movie`.
+   - Validate: Use `@Valid` in the `@PostMapping` method and try to submit an empty title in Postman to see validation errors.
+
+---
+
+### **Challenge 8: Integrate JPA**
+8. **Objective**: Add JPA annotations to the `Movie` class.
+   - Add `@Entity`, `@Id`, and `@GeneratedValue` to make the `Movie` class a JPA entity.
+   - Validate: Ensure no errors occur on application startup after adding JPA annotations.
+
+---
+
+### **Challenge 9: Create MovieRepository**
+9. **Objective**: Create a `MovieRepository` interface.
+   - Extend `JpaRepository<Movie, Long>` in `MovieRepository`.
+   - Validate: Ensure the application starts without issues and check if the repository is properly injected.
+
+---
+
+### **Challenge 10: Save Movie to Database**
+10. **Objective**: Persist movie data in the H2 database.
+    - Update `MovieService` to save movies to the database via `MovieRepository`.
+    - Validate: Use Postman to submit a movie and check the H2 console (`http://localhost:8080/h2-console`) to verify the data is stored.
+
+---
+
+### **Challenge 11: Create GET Endpoint for Movies**
+11. **Objective**: Add a method to get all movies.
+    - Create a `@GetMapping("/movies")` method in the controller to retrieve all movies.
+    - Validate: Use Postman to GET movies and verify data from the H2 database is returned.
+
+---
+
+### **Challenge 12: Find Movie by ID**
+12. **Objective**: Retrieve a movie by its ID.
+    - Create a `@GetMapping("/movies/{id}")` method to fetch a movie by its ID.
+    - Validate: Use Postman to fetch a specific movie by ID and verify correct data is returned.
+
+---
+
+### **Challenge 13: Handle Resource Not Found**
+13. **Objective**: Add exception handling for missing movies.
+    - Create a `ResourceNotFoundException` and throw it in the `MovieService` when a movie is not found.
+    - Validate: Try to fetch a non-existing movie by ID and see if the proper error message is returned.
+
+---
+
+### **Challenge 14: Add Update Movie Endpoint**
+14. **Objective**: Update an existing movie.
+    - Create a `@PutMapping("/movies/{id}")` method to update a movie.
+    - Validate: Use Postman to update an existing movie and check the H2 console for updated data.
+
+---
+
+### **Challenge 15: Delete Movie by ID**
+15. **Objective**: Add a method to delete a movie.
+    - Create a `@DeleteMapping("/movies/{id}")` method to delete a movie by ID.
+    - Validate: Use Postman to delete a movie, and verify that it's removed from the database.
+
+---
+
+### **Challenge 16: Implement Search by Title**
+16. **Objective**: Add a method to search movies by title.
+    - Add a `findByTitleContainingIgnoreCase` method in `MovieRepository`.
+    - Validate: Use Postman to search for movies by title.
+
+---
+
+### **Challenge 17: Search Movies by Genre**
+17. **Objective**: Add a method to search movies by genre.
+    - Add a `findByGenre` method in `MovieRepository` and corresponding `@GetMapping` endpoint.
+    - Validate: Use Postman to search movies by genre.
+
+---
+
+### **Challenge 18: Search Movies by Rating**
+18. **Objective**: Add a method to search movies by rating.
+    - Add a `findByRatingGreaterThanEqual` query in `MovieRepository`.
+    - Validate: Search for movies with a rating above a certain threshold using Postman.
+
+---
+
+### **Challenge 19: Add Release Date Search**
+19. **Objective**: Implement a search by release date range.
+    - Add a `findByReleaseDateBetween` query in `MovieRepository` and a corresponding endpoint.
+    - Validate: Search movies within a specific date range.
+
+---
+
+### **Challenge 20: Implement Unit Tests for MovieService**
+20. **Objective**: Add unit tests using JUnit and Mockito.
+    - Write tests for the `saveMovie()` and `getMovieById()` methods in `MovieService`.
+    - Validate: Run the tests and ensure they pass.
+
+---
+
+### **Challenge 21: Add Validation for Movie Rating**
+21. **Objective**: Add constraints on the movie rating.
+    - Add `@Min(0)` and `@Max(10)` for the `rating` field in `Movie`.
+    - Validate: Submit invalid ratings using Postman and ensure validation errors are returned.
+
+---
+
+### **Challenge 22: Add Pagination for Movie List**
+22. **Objective**: Add pagination to the `GET /movies` endpoint.
+    - Modify `MovieRepository` to return paginated results.
+    - Validate: Use Postman to retrieve paginated results by adding `page` and `size` query parameters.
+
+---
+
+### **Challenge 23: Enable Actuator for Health Monitoring**
+23. **Objective**: Add Spring Boot Actuator.
+    - Add the `spring-boot-starter-actuator` dependency and enable health endpoints.
+    - Validate: Access the health endpoint via `http://localhost:8080/actuator/health`.
+
+---
+
+### **Challenge 24: Implement Sorting**
+24. **Objective**: Add sorting capabilities for movie results.
+    - Modify `MovieRepository` to support sorting by `title`, `rating`, etc.
+    - Validate: Use Postman to get sorted results by adding sort parameters.
+
+---
+
+### **Challenge 25: Global Exception Handling**
+25. **Objective**: Implement global exception handling.
+    - Use `@ControllerAdvice` to create a global exception handler for validation errors and `ResourceNotFoundException`.
+    - Validate: Submit invalid data and ensure proper error messages are returned.
+
+---
+
+### **Challenge 26: Add CORS Configuration**
+26. **Objective**: Enable CORS for API access from other domains.
+    - Add a CORS configuration class using `WebMvcConfigurer`.
+    - Validate: Ensure the API is accessible from a frontend running on a different domain.
+
+---
+
+### **Challenge 27: Refactor MovieService with Transaction Management**
+27. **Objective**: Add transaction management.
+    - Annotate the `updateMovie()` method in `MovieService` with `@Transactional`.
+    - Validate: Ensure transactional integrity by performing multiple operations in the method.
+
+---
+
+### **Challenge 28: Enable H2 Console**
+28. **Objective**: Enable the H2 database console for debugging.
+    - Add H2 configuration in `application.properties` to enable the H2 console.
+    - Validate: Access the H2 console at `http://localhost:8080/h2-console`.
+
+---
+
+### **Challenge 29: Custom Query for Complex Search**
+29. **Objective**: Add a custom query for more complex movie search.
+    - Write a custom JPQL query in `MovieRepository` to search for movies based on multiple fields (e.g., title, genre, and rating).
+    - Validate: Use Postman to search with multiple criteria.
+
+---
+
