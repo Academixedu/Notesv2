@@ -159,7 +159,6 @@ Create a new Spring Boot project with the following dependencies:
 - **Spring Web**
 - **Spring Data JPA**
 - **H2 Database** (for in-memory database)
-- **Lombok** (optional, for reducing boilerplate code)
 - **Spring Boot DevTools** (optional, for development convenience)
 
 ---
