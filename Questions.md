@@ -1,9 +1,3 @@
-# Answers to Your Questions Using the Feynman Method
-
-Below are detailed explanations of your questions, aiming to make complex concepts simple and clear.
-
----
-
 ### 1. **What are the three main annotations combined in `@SpringBootApplication`?**
 
 The `@SpringBootApplication` annotation is like a shortcut in Spring Boot that combines three important annotations:
