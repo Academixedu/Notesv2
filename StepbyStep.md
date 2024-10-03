@@ -647,87 +647,402 @@ By now, you have implemented:
 
 # Movie API Development Challenges
 
-1. **Review Existing Code**: Familiarize yourself with the existing `MovieApiApplication`, `Movie` entity, `MovieRepository`, `MovieService`, and `MovieController` classes.
 
-2. **Update GET Endpoint**: Modify the existing GET endpoint in `MovieController` to return all movies instead of "Hello, Movie API!".
+1. **Update GET Endpoint**: Modify the existing GET endpoint in `MovieController` to return all movies instead of "Hello, Movie API!".
 
-3. **Implement getMovieById**: Add a method in `MovieService` to get a movie by ID and create a corresponding GET endpoint in `MovieController`.
+2. **Implement getMovieById**: Add a method in `MovieService` to get a movie by ID and create a corresponding GET endpoint in `MovieController`.
 
-4. **Create POST Endpoint**: Implement the `createMovie` method in `MovieService` and add a POST endpoint in `MovieController` to create a new movie.
+3. **Create POST Endpoint**: Implement the `createMovie` method in `MovieService` and add a POST endpoint in `MovieController` to create a new movie.
 
-5. **Implement updateMovie**: Add a method in `MovieService` to update a movie and create a corresponding PUT endpoint in `MovieController`.
+4. **Implement updateMovie**: Add a method in `MovieService` to update a movie and create a corresponding PUT endpoint in `MovieController`.
 
-6. **Implement deleteMovie**: Add a method in `MovieService` to delete a movie and create a corresponding DELETE endpoint in `MovieController`.
+5. **Implement deleteMovie**: Add a method in `MovieService` to delete a movie and create a corresponding DELETE endpoint in `MovieController`.
 
-7. **Exception Handling**: Create a `ResourceNotFoundException` class and use it in the `getMovieById` method when a movie is not found.
+6. **Exception Handling**: Create a `ResourceNotFoundException` class and use it in the `getMovieById` method when a movie is not found.
 
-8. **Validation**: Add validation annotations to the `Movie` entity (e.g., `@NotBlank` for title, `@Min` and `@Max` for rating).
+7. **Validation**: Add validation annotations to the `Movie` entity (e.g., `@NotBlank` for title, `@Min` and `@Max` for rating).
 
-9. **Handle Validation**: Update the controller to handle validation errors and return appropriate error responses.
+8. **Handle Validation**: Update the controller to handle validation errors and return appropriate error responses.
 
-10. **Custom Query - Find by Title**: Add a method in `MovieRepository` to find movies by title (case-insensitive, partial match).
+9. **Custom Query - Find by Title**: Add a method in `MovieRepository` to find movies by title (case-insensitive, partial match).
 
-11. **Title Search Endpoint**: Implement a method in `MovieService` to use the new repository method for title search and add a corresponding endpoint in `MovieController`.
+10. **Title Search Endpoint**: Implement a method in `MovieService` to use the new repository method for title search and add a corresponding endpoint in `MovieController`.
 
-12. **Custom Query - Find by Genre**: Add a method in `MovieRepository` to find movies by genre.
+11. **Custom Query - Find by Genre**: Add a method in `MovieRepository` to find movies by genre.
 
-13. **Genre Search Endpoint**: Implement a method in `MovieService` to use the new repository method for genre search and add a corresponding endpoint in `MovieController`.
+12. **Genre Search Endpoint**: Implement a method in `MovieService` to use the new repository method for genre search and add a corresponding endpoint in `MovieController`.
 
-14. **Custom Query - Find by Minimum Rating**: Add a method in `MovieRepository` to find movies with a rating greater than or equal to a given value.
+13. **Custom Query - Find by Minimum Rating**: Add a method in `MovieRepository` to find movies with a rating greater than or equal to a given value.
 
-15. **Rating Search Endpoint**: Implement a method in `MovieService` to use the new repository method for rating search and add a corresponding endpoint in `MovieController`.
+14. **Rating Search Endpoint**: Implement a method in `MovieService` to use the new repository method for rating search and add a corresponding endpoint in `MovieController`.
 
-16. **Custom Query - Find by Release Date Range**: Add a method in `MovieRepository` to find movies released between two dates.
+15. **Custom Query - Find by Release Date Range**: Add a method in `MovieRepository` to find movies released between two dates.
 
-17. **Date Range Search Endpoint**: Implement a method in `MovieService` to use the new repository method for date range search and add a corresponding endpoint in `MovieController`.
+16. **Date Range Search Endpoint**: Implement a method in `MovieService` to use the new repository method for date range search and add a corresponding endpoint in `MovieController`.
 
-18. **Unified Search Endpoint**: Create a single search endpoint in `MovieController` that can handle all search types (title, genre, rating, date range).
+17. **Unified Search Endpoint**: Create a single search endpoint in `MovieController` that can handle all search types (title, genre, rating, date range).
 
-19. **Pagination**: Update the "Get All Movies" endpoint to support pagination.
+18. **Pagination**: Update the "Get All Movies" endpoint to support pagination.
 
-20. **Sorting**: Add sorting capability to the "Get All Movies" endpoint.
+19. **Sorting**: Add sorting capability to the "Get All Movies" endpoint.
 
-21. **CORS Configuration**: Add a basic CORS configuration to allow requests from all origins.
+20. **CORS Configuration**: Add a basic CORS configuration to allow requests from all origins.
 
-22. **Logging**: Add logging statements to the service methods.
+21. **Logging**: Add logging statements to the service methods.
 
-23. **Unit Test - MovieService**: Write a unit test for the `createMovie` method in `MovieService`.
+22. **Unit Test - MovieService**: Write a unit test for the `createMovie` method in `MovieService`.
 
-24. **Unit Test - MovieController**: Write a unit test for the POST endpoint in `MovieController`.
+23. **Unit Test - MovieController**: Write a unit test for the POST endpoint in `MovieController`.
 
-25. **Integration Test**: Write an integration test for creating and retrieving a movie.
+24. **Integration Test**: Write an integration test for creating and retrieving a movie.
 
-26. **Data Initialization**: Create a `DataInitializer` class to populate the database with some initial movies on application startup.
+25. **Data Initialization**: Create a `DataInitializer` class to populate the database with some initial movies on application startup.
 
-27. **API Documentation**: Add Swagger annotations to document the API endpoints.
+26. **API Documentation**: Add Swagger annotations to document the API endpoints.
 
-28. **Custom Validation**: Create a custom validation annotation for the movie genre (e.g., to check against a list of valid genres).
+27. **Custom Validation**: Create a custom validation annotation for the movie genre (e.g., to check against a list of valid genres).
 
-29. **Error Handling**: Implement a global exception handler to standardize error responses.
+28. **Error Handling**: Implement a global exception handler to standardize error responses.
 
-30. **API Versioning**: Implement basic API versioning (e.g., v1) in the URL path.
+29. **API Versioning**: Implement basic API versioning (e.g., v1) in the URL path.
 
-31. **Caching**: Add caching to the "Get Movie by ID" endpoint.
+30. **Caching**: Add caching to the "Get Movie by ID" endpoint.
 
-32. **Actuator**: Add and configure Spring Boot Actuator for basic application monitoring.
+31. **Actuator**: Add and configure Spring Boot Actuator for basic application monitoring.
 
-33. **Custom Actuator Endpoint**: Create a custom Actuator endpoint that returns the count of movies in the database.
+32. **Custom Actuator Endpoint**: Create a custom Actuator endpoint that returns the count of movies in the database.
 
-34. **Request Logging**: Implement a filter to log incoming HTTP requests.
+33. **Request Logging**: Implement a filter to log incoming HTTP requests.
 
-35. **Response Compression**: Enable and configure response compression for the API.
+34. **Response Compression**: Enable and configure response compression for the API.
 
-36. **Database Indexing**: Add appropriate indexes to the `Movie` table for improved query performance.
+35. **Database Indexing**: Add appropriate indexes to the `Movie` table for improved query performance.
 
-37. **API Rate Limiting**: Implement basic rate limiting for API requests.
+36. **API Rate Limiting**: Implement basic rate limiting for API requests.
 
-38. **Asynchronous Processing**: Convert a synchronous operation (e.g., creating a movie) to an asynchronous one using `@Async`.
+37. **Asynchronous Processing**: Convert a synchronous operation (e.g., creating a movie) to an asynchronous one using `@Async`.
 
-39. **Batch Operations**: Implement a batch insert/update operation for movies.
+38. **Batch Operations**: Implement a batch insert/update operation for movies.
 
-40. **API Metrics**: Add custom metrics to track API usage (e.g., number of movies created, retrieved).
+39. **API Metrics**: Add custom metrics to track API usage (e.g., number of movies created, retrieved).
 
 These challenges build upon the existing code and gradually introduce more advanced concepts and features. Students can validate their progress after each step by testing the new functionality they've just added.
+
+---
+Search String Ideas:
+Certainly! For each assignment, here are **three variations of Google search strings** focusing on the official Spring documentation (`site:spring.io`):
+
+---
+
+### 1. **Update GET Endpoint**:
+
+- **Variation 1**: `spring boot retrieve all entities from repository site:spring.io`
+- **Variation 2**: `spring data jpa findall method example site:spring.io`
+- **Variation 3**: `spring boot restcontroller getmapping return list site:spring.io`
+
+---
+
+### 2. **Implement getMovieById**:
+
+- **Variation 1**: `spring boot find entity by id example site:spring.io`
+- **Variation 2**: `spring data jpa findbyid method site:spring.io`
+- **Variation 3**: `spring boot rest getmapping with pathvariable site:spring.io`
+
+---
+
+### 3. **Create POST Endpoint**:
+
+- **Variation 1**: `spring boot restcontroller postmapping example site:spring.io`
+- **Variation 2**: `spring boot handling post requests site:spring.io`
+- **Variation 3**: `spring boot save entity using postmapping site:spring.io`
+
+---
+
+### 4. **Implement updateMovie**:
+
+- **Variation 1**: `spring boot rest putmapping update entity site:spring.io`
+- **Variation 2**: `spring data jpa save method for update site:spring.io`
+- **Variation 3**: `spring boot updating records with putmapping site:spring.io`
+
+---
+
+### 5. **Implement deleteMovie**:
+
+- **Variation 1**: `spring boot rest deletemapping example site:spring.io`
+- **Variation 2**: `spring data jpa deletebyid method site:spring.io`
+- **Variation 3**: `spring boot deleting data with deletemapping site:spring.io`
+
+---
+
+### 6. **Exception Handling**:
+
+- **Variation 1**: `spring boot custom exceptions handling site:spring.io`
+- **Variation 2**: `spring boot controller advice exception site:spring.io`
+- **Variation 3**: `spring boot rest exception handling best practices site:spring.io`
+
+---
+
+### 7. **Validation**:
+
+- **Variation 1**: `spring boot bean validation annotations site:spring.io`
+- **Variation 2**: `spring boot javax validation example site:spring.io`
+- **Variation 3**: `spring boot using @valid annotation site:spring.io`
+
+---
+
+### 8. **Handle Validation**:
+
+- **Variation 1**: `spring boot rest controller validation error handling site:spring.io`
+- **Variation 2**: `spring boot bindingresult example site:spring.io`
+- **Variation 3**: `spring boot customizing validation error responses site:spring.io`
+
+---
+
+### 9. **Custom Query - Find by Title**:
+
+- **Variation 1**: `spring data jpa derived query methods site:spring.io`
+- **Variation 2**: `spring data jpa findby containing ignorecase site:spring.io`
+- **Variation 3**: `spring boot custom repository methods site:spring.io`
+
+---
+
+### 10. **Title Search Endpoint**:
+
+- **Variation 1**: `spring boot getmapping with requestparam site:spring.io`
+- **Variation 2**: `spring boot rest controller search parameter site:spring.io`
+- **Variation 3**: `spring boot handling query parameters site:spring.io`
+
+---
+
+### 11. **Custom Query - Find by Genre**:
+
+- **Variation 1**: `spring data jpa findby field example site:spring.io`
+- **Variation 2**: `spring data jpa query methods site:spring.io`
+- **Variation 3**: `spring boot repository find by genre site:spring.io`
+
+---
+
+### 12. **Genre Search Endpoint**:
+
+- **Variation 1**: `spring boot rest api get with parameters site:spring.io`
+- **Variation 2**: `spring boot requestparam annotation example site:spring.io`
+- **Variation 3**: `spring boot rest controller search by genre site:spring.io`
+
+---
+
+### 13. **Custom Query - Find by Minimum Rating**:
+
+- **Variation 1**: `spring data jpa findby rating greater than equal site:spring.io`
+- **Variation 2**: `spring data jpa comparison queries site:spring.io`
+- **Variation 3**: `spring boot repository methods with greater than site:spring.io`
+
+---
+
+### 14. **Rating Search Endpoint**:
+
+- **Variation 1**: `spring boot getmapping with requestparam example site:spring.io`
+- **Variation 2**: `spring boot rest api search by minimum rating site:spring.io`
+- **Variation 3**: `spring boot handling numerical request parameters site:spring.io`
+
+---
+
+### 15. **Custom Query - Find by Release Date Range**:
+
+- **Variation 1**: `spring data jpa findby date between site:spring.io`
+- **Variation 2**: `spring data jpa querying between dates site:spring.io`
+- **Variation 3**: `spring boot repository methods for date range site:spring.io`
+
+---
+
+### 16. **Date Range Search Endpoint**:
+
+- **Variation 1**: `spring boot rest controller date range parameters site:spring.io`
+- **Variation 2**: `spring boot handling date request parameters site:spring.io`
+- **Variation 3**: `spring boot getmapping multiple parameters site:spring.io`
+
+---
+
+### 17. **Unified Search Endpoint**:
+
+- **Variation 1**: `spring boot rest controller optional requestparams site:spring.io`
+- **Variation 2**: `spring boot multiple search criteria site:spring.io`
+- **Variation 3**: `spring boot dynamic queries with specifications site:spring.io`
+
+---
+
+### 18. **Pagination**:
+
+- **Variation 1**: `spring data jpa pagination pageable site:spring.io`
+- **Variation 2**: `spring boot rest api pagination example site:spring.io`
+- **Variation 3**: `spring data jpa using page request site:spring.io`
+
+---
+
+### 19. **Sorting**:
+
+- **Variation 1**: `spring data jpa sorting with sort site:spring.io`
+- **Variation 2**: `spring boot rest api sorting example site:spring.io`
+- **Variation 3**: `spring data jpa pageable sorting site:spring.io`
+
+---
+
+### 20. **CORS Configuration**:
+
+- **Variation 1**: `spring boot enable global cors configuration site:spring.io`
+- **Variation 2**: `spring boot @crossorigin annotation site:spring.io`
+- **Variation 3**: `spring boot configuring cors mappings site:spring.io`
+
+---
+
+### 21. **Logging**:
+
+- **Variation 1**: `spring boot logging configuration site:spring.io`
+- **Variation 2**: `spring boot adding logs to service methods site:spring.io`
+- **Variation 3**: `spring boot using logger example site:spring.io`
+
+---
+
+### 22. **Unit Test - MovieService**:
+
+- **Variation 1**: `spring boot testing service layer site:spring.io`
+- **Variation 2**: `spring boot mockito service test example site:spring.io`
+- **Variation 3**: `spring boot junit test for service methods site:spring.io`
+
+---
+
+### 23. **Unit Test - MovieController**:
+
+- **Variation 1**: `spring boot testing rest controllers site:spring.io`
+- **Variation 2**: `spring boot mockmvc example site:spring.io`
+- **Variation 3**: `spring boot controller unit test example site:spring.io`
+
+---
+
+### 24. **Integration Test**:
+
+- **Variation 1**: `spring boot integration testing rest api site:spring.io`
+- **Variation 2**: `spring boot testing with @springboottest site:spring.io`
+- **Variation 3**: `spring boot full stack integration test site:spring.io`
+
+---
+
+### 25. **Data Initialization**:
+
+- **Variation 1**: `spring boot initializing data with commandlinerunner site:spring.io`
+- **Variation 2**: `spring boot preload database on startup site:spring.io`
+- **Variation 3**: `spring boot applicationrunner example site:spring.io`
+
+---
+
+### 26. **API Documentation**:
+
+- **Variation 1**: `spring boot openapi documentation site:spring.io`
+- **Variation 2**: `spring boot swagger integration site:spring.io`
+- **Variation 3**: `spring boot rest api documentation with springdoc site:spring.io`
+
+---
+
+### 27. **Custom Validation**:
+
+- **Variation 1**: `spring boot creating custom constraint annotations site:spring.io`
+- **Variation 2**: `spring boot custom validator example site:spring.io`
+- **Variation 3**: `spring boot bean validation custom constraints site:spring.io`
+
+---
+
+### 28. **Error Handling**:
+
+- **Variation 1**: `spring boot global exception handling with @controlleradvice site:spring.io`
+- **Variation 2**: `spring boot rest api error responses site:spring.io`
+- **Variation 3**: `spring boot exception handler example site:spring.io`
+
+---
+
+### 29. **API Versioning**:
+
+- **Variation 1**: `spring boot rest api versioning strategies site:spring.io`
+- **Variation 2**: `spring boot api versioning in url path site:spring.io`
+- **Variation 3**: `spring boot versioning with request mapping site:spring.io`
+
+---
+
+### 30. **Caching**:
+
+- **Variation 1**: `spring boot enabling caching with cacheable site:spring.io`
+- **Variation 2**: `spring boot cache configuration example site:spring.io`
+- **Variation 3**: `spring boot caching rest api responses site:spring.io`
+
+---
+
+### 31. **Actuator**:
+
+- **Variation 1**: `spring boot actuator endpoints site:spring.io`
+- **Variation 2**: `spring boot monitoring with actuator site:spring.io`
+- **Variation 3**: `spring boot configuring actuator endpoints site:spring.io`
+
+---
+
+### 32. **Custom Actuator Endpoint**:
+
+- **Variation 1**: `spring boot creating custom actuator endpoints site:spring.io`
+- **Variation 2**: `spring boot actuator add custom endpoint site:spring.io`
+- **Variation 3**: `spring boot exposing custom metrics with actuator site:spring.io`
+
+---
+
+### 33. **Request Logging**:
+
+- **Variation 1**: `spring boot logging incoming requests filter site:spring.io`
+- **Variation 2**: `spring boot http request logging site:spring.io`
+- **Variation 3**: `spring boot interceptors for request logging site:spring.io`
+
+---
+
+### 34. **Response Compression**:
+
+- **Variation 1**: `spring boot enabling gzip compression site:spring.io`
+- **Variation 2**: `spring boot compressing response data site:spring.io`
+- **Variation 3**: `spring boot response compression configuration site:spring.io`
+
+---
+
+### 35. **Database Indexing**:
+
+- **Variation 1**: `spring data jpa adding indexes to entities site:spring.io`
+- **Variation 2**: `spring boot jpa @index annotation example site:spring.io`
+- **Variation 3**: `spring boot optimizing queries with indexes site:spring.io`
+
+---
+
+### 36. **API Rate Limiting**:
+
+- **Variation 1**: `spring boot implementing rate limiting site:spring.io`
+- **Variation 2**: `spring boot api throttling strategies site:spring.io`
+- **Variation 3**: `spring boot limiting api requests per user site:spring.io`
+
+---
+
+### 37. **Asynchronous Processing**:
+
+- **Variation 1**: `spring boot using @async annotation site:spring.io`
+- **Variation 2**: `spring boot enabling async methods site:spring.io`
+- **Variation 3**: `spring boot asynchronous service methods site:spring.io`
+
+---
+
+### 38. **Batch Operations**:
+
+- **Variation 1**: `spring data jpa batch inserts updates site:spring.io`
+- **Variation 2**: `spring boot performing batch operations site:spring.io`
+- **Variation 3**: `spring boot jpa bulk data operations site:spring.io`
+
+---
+
+### 39. **API Metrics**:
+
+- **Variation 1**: `spring boot micrometer custom metrics site:spring.io`
+- **Variation 2**: `spring boot monitoring api usage site:spring.io`
+- **Variation 3**: `spring boot adding metrics to rest api site:spring.io`
 
 ---
 
