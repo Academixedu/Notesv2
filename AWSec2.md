@@ -14,7 +14,7 @@
 2. **Install Docker**:
    Use the following command to install Docker:
    ```bash
-   sudo amazon-linux-extras install docker
+   sudo yum install docker
    ```
 
 3. **Start the Docker service**:
