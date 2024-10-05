@@ -23,18 +23,6 @@
    sudo service docker start
    ```
 
-4. **Add the `ec2-user` to the Docker group**:
-   This step allows you to run Docker commands without needing `sudo` every time:
-   ```bash
-   sudo usermod -a -G docker ec2-user
-   ```
-
-5. **Restart your session**:
-   Log out of the instance and log back in, or run the following command to apply the group changes:
-   ```bash
-   newgrp docker
-   ```
-
 6. **Verify Docker Installation**:
    To confirm that Docker is installed and running, check the Docker version:
    ```bash
