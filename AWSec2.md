@@ -1,4 +1,6 @@
-### Step-by-Step Instructions to Install Docker on EC2 and Connect to a Container
+
+
+### Step-by-Step Instructions to Install Docker on EC2 and Run the `movieapi:latest` Docker Container
 
 ---
 
@@ -23,7 +25,7 @@
    sudo service docker start
    ```
 
-6. **Verify Docker Installation**:
+4. **Verify Docker Installation**:
    To confirm that Docker is installed and running, check the Docker version:
    ```bash
    docker --version
@@ -32,97 +34,100 @@
 
 ---
 
-### Step 2: Run a Test Docker Container
+### Step 2: Configure Security Group
 
-Now that Docker is installed, let’s run a test container to ensure everything is working.
+Before running your application, make sure the EC2 security group allows inbound traffic on port **8080** (or any port you will map to).
 
-1. **Pull a Docker image**:
-   We’ll use the official **hello-world** image as a simple test:
-   ```bash
-   docker pull hello-world
-   ```
-
-2. **Run the Docker container**:
-   Execute the following command to run the container:
-   ```bash
-   docker run hello-world
-   ```
-
-   This should output a message confirming that Docker is working correctly.
+1. **Open your EC2 Security Group settings** in the AWS console.
+2. **Add a new inbound rule** for `HTTP` or `Custom TCP` with port `8080` and set it to allow access from `Anywhere` (0.0.0.0/0) for simplicity, or restrict it to specific IPs for security.
 
 ---
 
-### Step 3: Install and Run a Web Server in a Docker Container
+### Step 3: Log In to Docker Hub
 
-Let’s run a more useful container, such as **nginx**, which is a web server.
+To pull your Docker image (`movieapi:latest`) from Docker Hub, log in using your Docker credentials:
 
-1. **Pull the NGINX Docker image**:
+```bash
+docker login
+```
+
+- You will be prompted to enter your Docker Hub username and password.
+
+---
+
+### Step 4: Pull and Run the `movieapi` Docker Container
+
+1. **Pull the Docker image**:
+   Use the following command to pull the `movieapi:latest` image from Docker Hub (replace `your-dockerhub-username` with your actual username):
    ```bash
-   docker pull nginx
+   docker pull your-dockerhub-username/movieapi:latest
    ```
 
-2. **Run the NGINX container**:
+   For example:
    ```bash
-   docker run -d -p 80:80 --name nginx-server nginx
+   docker pull topkuber/movieapi:latest
    ```
+
+2. **Run the Docker container**:
+   Once the image is pulled, run the container with the following command:
+   ```bash
+   docker run -d -p 8080:8080 your-dockerhub-username/movieapi:latest
+   ```
+
    - `-d`: Runs the container in detached mode (in the background).
-   - `-p 80:80`: Maps port 80 on the EC2 instance to port 80 on the container, allowing you to access the web server.
-   - `--name nginx-server`: Gives the container a name (`nginx-server`).
+   - `-p 8080:8080`: Maps port 8080 on the EC2 instance to port 8080 inside the container.
 
-3. **Verify that the container is running**:
+   Example:
+   ```bash
+   docker run -d -p 8080:8080 topkuber/movieapi:latest
+   ```
+
+3. **Verify the container is running**:
    Run the following command to see your running containers:
    ```bash
    docker ps
    ```
 
----
-
-### Step 4: Connect to the Docker Container (NGINX Web Server)
-
-1. **Access the web server**:
-   Open your web browser and navigate to the public IP address of your EC2 instance. You can find this IP in the EC2 dashboard under the "Public IP" column.
-   - **URL**: `http://your-ec2-public-ip`
-   
-   If everything is set up correctly, you should see the NGINX welcome page.
+   You should see your `movieapi` container listed.
 
 ---
 
-### Step 5: Access and Interact with the Container
+### Step 5: Access the Movie API Application
 
-If you want to connect directly to the running Docker container and interact with it:
+Once the container is running, you can access the Movie API application through the public IP address of your EC2 instance.
 
-1. **Access the NGINX container's shell**:
-   Run the following command to open a shell inside the running container:
-   ```bash
-   docker exec -it nginx-server /bin/bash
+1. **Find your EC2 instance's public IP** in the AWS EC2 dashboard.
+2. **Open your web browser** and navigate to the following URL:
+   ```text
+   http://your-ec2-public-ip:8080/hello
    ```
 
-2. **Explore the container**:
-   Once inside, you can run regular Linux commands to explore the file system:
-   ```bash
-   ls
+   Replace `your-ec2-public-ip` with your instance's actual public IP address. You should see the message:
    ```
-   When you're done, type `exit` to leave the container shell.
+   Welcome to the Movie API!
+   ```
 
 ---
 
 ### Step 6: Manage Your Docker Containers
 
-Here are some common Docker management commands:
+Here are some common Docker management commands for managing your running `movieapi` container:
 
 1. **Stop the container**:
    ```bash
-   docker stop nginx-server
+   docker stop <container-id>
    ```
+
+   Replace `<container-id>` with the ID of the `movieapi` container, which you can find by running `docker ps`.
 
 2. **Start the container**:
    ```bash
-   docker start nginx-server
+   docker start <container-id>
    ```
 
 3. **Remove the container**:
    ```bash
-   docker rm nginx-server
+   docker rm <container-id>
    ```
 
 4. **List all containers (including stopped ones)**:
@@ -133,6 +138,4 @@ Here are some common Docker management commands:
 ---
 
 ### Conclusion
-You have successfully installed Docker on your EC2 instance, run an NGINX web server inside a Docker container, and accessed the web server. You can now experiment with running more complex applications inside containers or even build your own custom containers.
 
-Let me know if you'd like to try anything more with Docker or if you need further help!
