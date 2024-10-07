@@ -474,4 +474,176 @@ The resulting app has a clean, responsive design that works well on both desktop
 - Adding more weather details (e.g., humidity, wind speed)
 - Implementing a search function for cities
 - Adding animations for smoother transitions
+###########################################
 
+// App.js
+import React, { useState, useEffect } from 'react';
+import Header from './components/Header';
+import Sidebar from './components/Sidebar';
+import WeatherDisplay from './components/WeatherDisplay';
+import Footer from './components/Footer';
+import './App.css';
+
+const App = () => {
+  const [selectedCity, setSelectedCity] = useState('New York');
+  const [weatherData, setWeatherData] = useState(null);
+  const [dataType, setDataType] = useState('single-line');
+
+  // Simulated API calls
+  const fetchWeatherSingleLine = async (city) => {
+    await new Promise(resolve => setTimeout(resolve, 500));
+    return `${city}: 22°C, Sunny`;
+  };
+
+  const fetchWeatherSingleObject = async (city) => {
+    await new Promise(resolve => setTimeout(resolve, 500));
+    return {
+      city: city,
+      temperature: 22,
+      condition: 'Sunny',
+      humidity: 60,
+      windSpeed: 5
+    };
+  };
+
+  const fetchWeatherMultipleObjects = async () => {
+    await new Promise(resolve => setTimeout(resolve, 500));
+    return [
+      { city: 'New York', temperature: 22, condition: 'Sunny' },
+      { city: 'London', temperature: 15, condition: 'Cloudy' },
+      { city: 'Tokyo', temperature: 28, condition: 'Rainy' },
+      { city: 'Sydney', temperature: 20, condition: 'Partly Cloudy' },
+      { city: 'Paris', temperature: 18, condition: 'Clear' }
+    ];
+  };
+
+  useEffect(() => {
+    const fetchWeather = async () => {
+      let data;
+      switch (dataType) {
+        case 'single-line':
+          data = await fetchWeatherSingleLine(selectedCity);
+          break;
+        case 'single-object':
+          data = await fetchWeatherSingleObject(selectedCity);
+          break;
+        case 'multiple-objects':
+          data = await fetchWeatherMultipleObjects();
+          break;
+        default:
+          data = await fetchWeatherSingleLine(selectedCity);
+      }
+      setWeatherData(data);
+    };
+
+    fetchWeather();
+  }, [selectedCity, dataType]);
+
+  return (
+    <div className="app-container">
+      <Header />
+      <div className="main-content">
+        <Sidebar
+          selectedCity={selectedCity}
+          setSelectedCity={setSelectedCity}
+          dataType={dataType}
+          setDataType={setDataType}
+        />
+        <WeatherDisplay weatherData={weatherData} dataType={dataType} />
+      </div>
+      <Footer />
+    </div>
+  );
+};
+
+export default App;
+
+// components/Sidebar.js
+import React from 'react';
+
+const Sidebar = ({ selectedCity, setSelectedCity, dataType, setDataType }) => {
+  const cities = ['New York', 'London', 'Tokyo', 'Sydney', 'Paris'];
+  
+  return (
+    <aside className="sidebar">
+      <h2>Cities</h2>
+      <ul>
+        {cities.map(city => (
+          <li
+            key={city}
+            className={city === selectedCity ? 'selected' : ''}
+            onClick={() => setSelectedCity(city)}
+          >
+            {city}
+          </li>
+        ))}
+      </ul>
+      <h2>Data Type</h2>
+      <ul>
+        {['single-line', 'single-object', 'multiple-objects'].map(type => (
+          <li
+            key={type}
+            className={type === dataType ? 'selected' : ''}
+            onClick={() => setDataType(type)}
+          >
+            {type}
+          </li>
+        ))}
+      </ul>
+    </aside>
+  );
+};
+
+export default Sidebar;
+
+// components/WeatherDisplay.js
+import React from 'react';
+
+const WeatherDisplay = ({ weatherData, dataType }) => {
+  if (!weatherData) {
+    return <main className="weather-display"><p>Loading weather data...</p></main>;
+  }
+
+  let content;
+  switch (dataType) {
+    case 'single-line':
+      content = <p>{weatherData}</p>;
+      break;
+    case 'single-object':
+      content = (
+        <div>
+          <h2>{weatherData.city}</h2>
+          <p>Temperature: {weatherData.temperature}°C</p>
+          <p>Condition: {weatherData.condition}</p>
+          <p>Humidity: {weatherData.humidity}%</p>
+          <p>Wind Speed: {weatherData.windSpeed} m/s</p>
+        </div>
+      );
+      break;
+    case 'multiple-objects':
+      content = (
+        <div>
+          {weatherData.map(city => (
+            <div key={city.city} className="city-weather">
+              <h3>{city.city}</h3>
+              <p>Temperature: {city.temperature}°C</p>
+              <p>Condition: {city.condition}</p>
+            </div>
+          ))}
+        </div>
+      );
+      break;
+    default:
+      content = <p>Unknown data type</p>;
+  }
+
+  return (
+    <main className="weather-display">
+      <div className="weather-info">
+        {content}
+      </div>
+    </main>
+  );
+};
+
+export default WeatherDisplay;
