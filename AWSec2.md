@@ -137,5 +137,82 @@ Here are some common Docker management commands for managing your running `movie
 
 ---
 
-### Conclusion
+### Tutorial: Building and Pushing a Docker Image
+
+This tutorial will guide you through building a Docker image from your Dockerfile and pushing it to Docker Hub or any other Docker registry.
+
+#### Prerequisites
+- Docker installed on your local machine.
+- Docker Hub account (or another Docker registry) if you want to push your image.
+- Dockerfile ready in your project directory.
+
+### Step 1: Build the Docker Image
+
+1. **Navigate to your project directory**:
+   Open your terminal and navigate to the directory where your Dockerfile is located.
+   ```bash
+   cd /path/to/your/project
+   ```
+
+2. **Build the Docker image**:
+   Use the `docker build` command to build your image. Replace `your-image-name` with a name for your Docker image.
+   ```bash
+   docker build -t your-image-name .
+   ```
+   - `-t` tags the image with a name.
+   - `.` specifies the current directory as the build context.
+
+3. **Verify the image**:
+   Check if your image was built successfully by running:
+   ```bash
+   docker images
+   ```
+   You should see your image listed with the name you provided.
+
+### Step 2: Tag the Docker Image
+
+Before pushing your image to a Docker registry, you need to tag it properly. The tag format typically follows:
+```
+<registry-url>/<username>/<image-name>:<tag>
+```
+
+1. **Tag the image**:
+   If you’re using Docker Hub, it would look like this:
+   ```bash
+   docker tag your-image-name your-dockerhub-username/your-image-name:latest
+   ```
+   - Replace `your-dockerhub-username` with your Docker Hub username.
+   - Replace `latest` with a version tag if needed (e.g., `v1.0`).
+
+### Step 3: Push the Docker Image to Docker Hub
+
+1. **Log in to Docker Hub**:
+   Make sure you’re logged in to Docker Hub (or your chosen registry).
+   ```bash
+   docker login
+   ```
+   Enter your Docker Hub credentials when prompted.
+
+2. **Push the image**:
+   ```bash
+   docker push your-dockerhub-username/your-image-name:latest
+   ```
+   This command pushes your image to Docker Hub. You should see the layers being uploaded.
+
+### Step 4: Verify the Pushed Image
+
+1. Go to your Docker Hub repository page (https://hub.docker.com/r/your-dockerhub-username/your-image-name) and verify that the image has been pushed successfully.
+2. You can also pull the image back to ensure it’s working:
+   ```bash
+   docker pull your-dockerhub-username/your-image-name:latest
+   ```
+
+### Summary
+
+You've now built and pushed a Docker image using the following steps:
+- **Build the image** using your Dockerfile.
+- **Tag the image** properly for the Docker registry.
+- **Push the image** to Docker Hub or another Docker registry.
+
+You can now use this image in your Docker deployments!
 
