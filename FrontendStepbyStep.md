@@ -965,6 +965,3 @@ body {
 
 **Note**: Make sure to import `App.css` in your `App.js` file and pass the necessary props to your components.
 
-By following this tutorial, you should now have a functioning React weather app that demonstrates parent-child component relationships, incremental CSS styling, and handling different JSON data formats without runtime errors.
-
-If you encounter any issues or have questions, feel free to ask!
