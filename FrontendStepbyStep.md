@@ -2,6 +2,8 @@
 
 In this tutorial, we'll build a simple weather app using React. We'll start by creating the component structure in `App.js`, demonstrating how parent and child components form the overall HTML structure. Then, we'll incrementally add CSS to style our app, explaining each step. Finally, we'll create three simple functions that return hardcoded weather data in different formats—a single line, a single object, and an array of objects—and show how to handle each of these in our app.
 
+We'll ensure that the app functions correctly by handling asynchronous data fetching and preventing runtime errors.
+
 ## Table of Contents
 
 1. [Setting Up the Project](#1-setting-up-the-project)
@@ -23,8 +25,12 @@ In this tutorial, we'll build a simple weather app using React. We'll start by c
    - 6.1. [Single-Line Response](#61-single-line-response)
    - 6.2. [Single-Object Response](#62-single-object-response)
    - 6.3. [Array of Objects Response](#63-array-of-objects-response)
-7. [Conclusion](#7-conclusion)
-8. [Full Code Examples](#8-full-code-examples)
+7. [Fixing Runtime Errors](#7-fixing-runtime-errors)
+   - 7.1. [Making Data Fetching Asynchronous](#71-making-data-fetching-asynchronous)
+   - 7.2. [Updating the useEffect Hook](#72-updating-the-useeffect-hook)
+   - 7.3. [Updating WeatherDisplay Component](#73-updating-weatherdisplay-component)
+8. [Conclusion](#8-conclusion)
+9. [Full Code Examples](#9-full-code-examples)
 
 ---
 
@@ -386,52 +392,14 @@ import React, { useState, useEffect } from 'react';
 // ... other imports ...
 
 function App() {
-  // ... existing code ...
-
   // State variables
   const [selectedCity, setSelectedCity] = useState('New York');
   const [dataType, setDataType] = useState('single-line'); // Options: 'single-line', 'single-object', 'multiple-objects'
   const [weatherData, setWeatherData] = useState(null);
 
-  // Hardcoded Weather Data Functions
-
-  // 1. Single Line
-  function getWeatherSingleLine(city) {
-    return `${city}: 22°C, Sunny`;
-  }
-
-  // 2. Single Object
-  function getWeatherSingleObject(city) {
-    return {
-      city: city,
-      temperature: 22,
-      condition: 'Sunny',
-      humidity: 60,
-      windSpeed: 5,
-    };
-  }
-
-  // 3. Array of Objects
-  function getWeatherMultipleObjects() {
-    return [
-      { city: 'New York', temperature: 22, condition: 'Sunny' },
-      { city: 'London', temperature: 15, condition: 'Cloudy' },
-      { city: 'Tokyo', temperature: 28, condition: 'Rainy' },
-      { city: 'Sydney', temperature: 20, condition: 'Partly Cloudy' },
-      { city: 'Paris', temperature: 18, condition: 'Clear' },
-    ];
-  }
-
   // ... rest of the code ...
 }
 ```
-
-**Explanation**:
-
-- **`getWeatherSingleLine`**: Returns a string with weather info.
-- **`getWeatherSingleObject`**: Returns an object with detailed weather properties.
-- **`getWeatherMultipleObjects`**: Returns an array of objects, each representing a city's weather.
-- These functions simulate API calls for simplicity.
 
 ---
 
@@ -444,36 +412,130 @@ We'll show how to handle each type of weather data in our app.
 **Updating `App.js`**:
 
 ```jsx
-// ... previous code ...
+// ... existing imports ...
 
-useEffect(() => {
-  let data;
-  switch (dataType) {
-    case 'single-line':
-      data = getWeatherSingleLine(selectedCity);
-      break;
-    case 'single-object':
-      data = getWeatherSingleObject(selectedCity);
-      break;
-    case 'multiple-objects':
-      data = getWeatherMultipleObjects();
-      break;
-    default:
-      data = getWeatherSingleLine(selectedCity);
-  }
-  setWeatherData(data);
-}, [selectedCity, dataType]);
+function App() {
+  // State variables
+  const [selectedCity, setSelectedCity] = useState('New York');
+  const [dataType, setDataType] = useState('single-line');
+  const [weatherData, setWeatherData] = useState(null);
+
+  // Simulate API calls
+  const getWeatherSingleLine = async (city) => {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    return `${city}: 22°C, Sunny`;
+  };
+
+  // ... rest of the code ...
+}
+```
+
+**Explanation**:
+
+- **Asynchronous Function**: Simulates an API call using `async` and `await`.
+- **Simulated Delay**: Uses `setTimeout` to mimic network latency.
+- **Returns a Single-Line String**: Provides a simple weather description.
+
+### 6.2. Single-Object Response
+
+**Updating `App.js`**:
+
+```jsx
+// ... existing code ...
+
+const getWeatherSingleObject = async (city) => {
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  return {
+    city: city,
+    temperature: 22,
+    condition: 'Sunny',
+    humidity: 60,
+    windSpeed: 5,
+  };
+};
 
 // ... rest of the code ...
 ```
 
 **Explanation**:
 
-- **`useEffect` Hook**: Updates weather data whenever `selectedCity` or `dataType` changes.
-- **Switch Statement**: Determines which data function to call based on `dataType`.
-- **`setWeatherData`**: Updates the state with the new weather data.
+- **Returns an Object**: Contains detailed weather information.
 
-**Updating `WeatherDisplay.js`**:
+### 6.3. Array of Objects Response
+
+**Updating `App.js`**:
+
+```jsx
+// ... existing code ...
+
+const getWeatherMultipleObjects = async () => {
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  return [
+    { city: 'New York', temperature: 22, condition: 'Sunny' },
+    { city: 'London', temperature: 15, condition: 'Cloudy' },
+    { city: 'Tokyo', temperature: 28, condition: 'Rainy' },
+    { city: 'Sydney', temperature: 20, condition: 'Partly Cloudy' },
+    { city: 'Paris', temperature: 18, condition: 'Clear' },
+  ];
+};
+
+// ... rest of the code ...
+```
+
+**Explanation**:
+
+- **Returns an Array of Objects**: Each object represents weather data for a different city.
+
+---
+
+## 7. Fixing Runtime Errors
+
+To prevent runtime errors like `weatherData.map is not a function`, we need to ensure that our app handles asynchronous data fetching correctly and checks the data type before rendering.
+
+### 7.1. Making Data Fetching Asynchronous
+
+We've already updated our data fetching functions to be asynchronous. This simulates real-world API calls and ensures that our app handles data fetching properly.
+
+### 7.2. Updating the useEffect Hook
+
+**Modify `useEffect` in `App.js`**:
+
+```jsx
+useEffect(() => {
+  setWeatherData(null); // Reset weather data before fetching new data
+
+  const fetchWeather = async () => {
+    let data;
+    switch (dataType) {
+      case 'single-line':
+        data = await getWeatherSingleLine(selectedCity);
+        break;
+      case 'single-object':
+        data = await getWeatherSingleObject(selectedCity);
+        break;
+      case 'multiple-objects':
+        data = await getWeatherMultipleObjects();
+        break;
+      default:
+        data = await getWeatherSingleLine(selectedCity);
+    }
+    setWeatherData(data);
+  };
+
+  fetchWeather();
+}, [selectedCity, dataType]);
+```
+
+**Explanation**:
+
+- **Reset `weatherData`**: Before fetching new data, reset `weatherData` to `null` to prevent using outdated data.
+- **Asynchronous Fetching**: The `fetchWeather` function is `async` and uses `await` to wait for data.
+- **Data Fetching**: Depending on the `dataType`, it calls the appropriate function.
+- **Update State**: Once data is fetched, `setWeatherData` updates the state.
+
+### 7.3. Updating WeatherDisplay Component
+
+**Modify `WeatherDisplay.js`**:
 
 ```jsx
 import React from 'react';
@@ -492,14 +554,43 @@ function WeatherDisplay({ weatherData, dataType }) {
     case 'single-line':
       content = <p>{weatherData}</p>;
       break;
-    // ... other cases ...
+    case 'single-object':
+      content = (
+        <div className="weather-info">
+          <h2>{weatherData.city}</h2>
+          <p>Temperature: {weatherData.temperature}°C</p>
+          <p>Condition: {weatherData.condition}</p>
+          <p>Humidity: {weatherData.humidity}%</p>
+          <p>Wind Speed: {weatherData.windSpeed} m/s</p>
+        </div>
+      );
+      break;
+    case 'multiple-objects':
+      if (!Array.isArray(weatherData)) {
+        // If weatherData is not an array yet, display a loading message
+        return (
+          <main className="weather-display">
+            <p>Loading weather data...</p>
+          </main>
+        );
+      }
+      content = (
+        <div>
+          {weatherData.map((cityWeather) => (
+            <div key={cityWeather.city} className="city-weather">
+              <h3>{cityWeather.city}</h3>
+              <p>Temperature: {cityWeather.temperature}°C</p>
+              <p>Condition: {cityWeather.condition}</p>
+            </div>
+          ))}
+        </div>
+      );
+      break;
+    default:
+      content = <p>Unknown data type.</p>;
   }
 
-  return (
-    <main className="weather-display">
-      <div className="weather-info">{content}</div>
-    </main>
-  );
+  return <main className="weather-display">{content}</main>;
 }
 
 export default WeatherDisplay;
@@ -507,60 +598,13 @@ export default WeatherDisplay;
 
 **Explanation**:
 
-- **Props**: Receives `weatherData` and `dataType` as props.
-- **Conditional Rendering**: Displays loading text if `weatherData` is not yet available.
-- **Content Variable**: Determines how to render the weather data based on `dataType`.
-
-### 6.2. Single-Object Response
-
-**Updating `WeatherDisplay.js`** (Add to the switch statement):
-
-```jsx
-case 'single-object':
-  content = (
-    <div className="weather-info">
-      <h2>{weatherData.city}</h2>
-      <p>Temperature: {weatherData.temperature}°C</p>
-      <p>Condition: {weatherData.condition}</p>
-      <p>Humidity: {weatherData.humidity}%</p>
-      <p>Wind Speed: {weatherData.windSpeed} m/s</p>
-    </div>
-  );
-  break;
-```
-
-**Explanation**:
-
-- **Rendering Object Data**: Displays detailed weather information from the object.
-
-### 6.3. Array of Objects Response
-
-**Updating `WeatherDisplay.js`** (Add to the switch statement):
-
-```jsx
-case 'multiple-objects':
-  content = (
-    <div>
-      {weatherData.map((cityWeather) => (
-        <div key={cityWeather.city} className="city-weather">
-          <h3>{cityWeather.city}</h3>
-          <p>Temperature: {cityWeather.temperature}°C</p>
-          <p>Condition: {cityWeather.condition}</p>
-        </div>
-      ))}
-    </div>
-  );
-  break;
-```
-
-**Explanation**:
-
-- **Mapping Over Data**: Iterates over the array of objects to display each city's weather.
-- **Unique Key**: Uses `cityWeather.city` as a unique key for each element.
+- **Check for Data**: If `weatherData` is `null`, display a loading message.
+- **Check Data Type**: Before using `.map`, ensure `weatherData` is an array using `Array.isArray(weatherData)`.
+- **Prevent Errors**: This prevents runtime errors when `weatherData` is not yet available.
 
 ---
 
-## 7. Conclusion
+## 8. Conclusion
 
 In this tutorial, we've:
 
@@ -569,8 +613,9 @@ In this tutorial, we've:
 - **Incrementally Added CSS**: Styled the app step by step, explaining each addition.
 - **Created Hardcoded Weather Data Functions**: Wrote functions that return weather data in different formats.
 - **Handled Different JSON Responses**: Displayed data whether it's a single line, a single object, or an array of objects.
+- **Fixed Runtime Errors**: Ensured the app handles asynchronous data fetching correctly and prevents errors.
 
-By following these steps, you've learned how to build a basic weather app in React that can handle various data formats and display them appropriately. This approach helps in understanding how parent and child components work together and how to manage state and props in React.
+By following these steps, you've learned how to build a basic weather app in React that can handle various data formats and display them appropriately. This approach helps in understanding how parent and child components work together and how to manage state, props, and asynchronous data in React.
 
 ### Next Steps
 
@@ -583,7 +628,7 @@ Happy coding!
 
 ---
 
-## 8. Full Code Examples
+## 9. Full Code Examples
 
 ### `src/App.js`
 
@@ -601,15 +646,14 @@ function App() {
   const [dataType, setDataType] = useState('single-line'); // Options: 'single-line', 'single-object', 'multiple-objects'
   const [weatherData, setWeatherData] = useState(null);
 
-  // Hardcoded Weather Data Functions
-
-  // 1. Single Line
-  function getWeatherSingleLine(city) {
+  // Simulate API calls
+  const getWeatherSingleLine = async (city) => {
+    await new Promise((resolve) => setTimeout(resolve, 500));
     return `${city}: 22°C, Sunny`;
-  }
+  };
 
-  // 2. Single Object
-  function getWeatherSingleObject(city) {
+  const getWeatherSingleObject = async (city) => {
+    await new Promise((resolve) => setTimeout(resolve, 500));
     return {
       city: city,
       temperature: 22,
@@ -617,10 +661,10 @@ function App() {
       humidity: 60,
       windSpeed: 5,
     };
-  }
+  };
 
-  // 3. Array of Objects
-  function getWeatherMultipleObjects() {
+  const getWeatherMultipleObjects = async () => {
+    await new Promise((resolve) => setTimeout(resolve, 500));
     return [
       { city: 'New York', temperature: 22, condition: 'Sunny' },
       { city: 'London', temperature: 15, condition: 'Cloudy' },
@@ -628,24 +672,30 @@ function App() {
       { city: 'Sydney', temperature: 20, condition: 'Partly Cloudy' },
       { city: 'Paris', temperature: 18, condition: 'Clear' },
     ];
-  }
+  };
 
   useEffect(() => {
-    let data;
-    switch (dataType) {
-      case 'single-line':
-        data = getWeatherSingleLine(selectedCity);
-        break;
-      case 'single-object':
-        data = getWeatherSingleObject(selectedCity);
-        break;
-      case 'multiple-objects':
-        data = getWeatherMultipleObjects();
-        break;
-      default:
-        data = getWeatherSingleLine(selectedCity);
-    }
-    setWeatherData(data);
+    setWeatherData(null); // Reset weather data before fetching new data
+
+    const fetchWeather = async () => {
+      let data;
+      switch (dataType) {
+        case 'single-line':
+          data = await getWeatherSingleLine(selectedCity);
+          break;
+        case 'single-object':
+          data = await getWeatherSingleObject(selectedCity);
+          break;
+        case 'multiple-objects':
+          data = await getWeatherMultipleObjects();
+          break;
+        default:
+          data = await getWeatherSingleLine(selectedCity);
+      }
+      setWeatherData(data);
+    };
+
+    fetchWeather();
   }, [selectedCity, dataType]);
 
   return (
@@ -774,6 +824,13 @@ function WeatherDisplay({ weatherData, dataType }) {
       );
       break;
     case 'multiple-objects':
+      if (!Array.isArray(weatherData)) {
+        return (
+          <main className="weather-display">
+            <p>Loading weather data...</p>
+          </main>
+        );
+      }
       content = (
         <div>
           {weatherData.map((cityWeather) => (
@@ -790,11 +847,7 @@ function WeatherDisplay({ weatherData, dataType }) {
       content = <p>Unknown data type.</p>;
   }
 
-  return (
-    <main className="weather-display">
-      {content}
-    </main>
-  );
+  return <main className="weather-display">{content}</main>;
 }
 
 export default WeatherDisplay;
@@ -911,3 +964,7 @@ body {
 ---
 
 **Note**: Make sure to import `App.css` in your `App.js` file and pass the necessary props to your components.
+
+By following this tutorial, you should now have a functioning React weather app that demonstrates parent-child component relationships, incremental CSS styling, and handling different JSON data formats without runtime errors.
+
+If you encounter any issues or have questions, feel free to ask!
